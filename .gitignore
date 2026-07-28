@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+.vscode/
+.idea/
+*.pth
+*.pt
+*.csv
+!data/sample_trace.csv
