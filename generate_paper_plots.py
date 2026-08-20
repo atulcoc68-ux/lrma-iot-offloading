@@ -1,6 +1,5 @@
 import os
-import glob
-import time
+import re
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -16,12 +15,75 @@ try:
 except ModuleNotFoundError:
     from config import EnvConfig
 
+EXPECTED_SEEDS = [42, 43, 44, 45, 46]
+
+
+def validate_queue_files(file_paths, expected_seeds=EXPECTED_SEEDS):
+    """
+    Strictly validates a list of raw queue CSV files.
+    Verifies:
+    1. At least one file exists.
+    2. Exactly the expected seeds are present in the list of files.
+    3. No unexpected seeds are included.
+    4. Every file can be loaded with pandas.
+    5. Required columns exist ('slot', 'ed_queue_bits', 'mes_queue_bits').
+    6. All files have the same slot/time axis order.
+    7. No NaN/Inf values occur in queue columns.
+    """
+    if not file_paths:
+        raise FileNotFoundError("Expected queue files list is empty.")
+
+    for f in file_paths:
+        if not os.path.exists(f):
+            raise FileNotFoundError(f"Required raw queue file missing: {f}")
+
+    # Validate seed matching
+    extracted_seeds = []
+    for f in file_paths:
+        fname = os.path.basename(str(f))
+        match = re.search(r'seed(\d+)', fname)
+        if not match:
+            raise ValueError(f"Could not parse seed from filename: {fname}")
+        extracted_seeds.append(int(match.group(1)))
+
+    if sorted(list(set(extracted_seeds))) != sorted(expected_seeds):
+        raise ValueError(f"Seed mismatch! Expected unique seeds {expected_seeds}, got {set(extracted_seeds)}")
+
+    # Load and validate content
+    first_slots = None
+    dfs = []
+    for f in file_paths:
+        try:
+            df = pd.read_csv(f)
+        except Exception as e:
+            raise ValueError(f"Failed to load CSV file {f}: {e}")
+
+        required_cols = ['slot', 'ed_queue_bits', 'mes_queue_bits']
+        for col in required_cols:
+            if col not in df.columns:
+                raise ValueError(f"File {f} missing required column: '{col}'")
+
+        if first_slots is None:
+            first_slots = df['slot'].values
+        else:
+            if not np.array_equal(df['slot'].values, first_slots):
+                raise ValueError(f"File {f} has mismatched slot axis compared to first file.")
+
+        if df['ed_queue_bits'].isnull().any() or df['mes_queue_bits'].isnull().any():
+            raise ValueError(f"File {f} contains NaN values in queue columns.")
+
+        if np.isinf(df['ed_queue_bits']).any() or np.isinf(df['mes_queue_bits']).any():
+            raise ValueError(f"File {f} contains Inf values in queue columns.")
+
+        dfs.append(df)
+
+    return dfs
+
 
 def plot_fig4_and_fig5():
     summary_path = os.path.join(EnvConfig.PROCESSED_RESULTS_DIR, "fig4_fig5_summary.csv")
     if not os.path.exists(summary_path):
-        print(f"Warning: {summary_path} not found. Skipping Fig 4 & 5.")
-        return
+        raise FileNotFoundError(f"Required summary file missing: {summary_path}")
 
     df = pd.read_csv(summary_path)
     df_agg = df.groupby('v_value').agg({
@@ -29,13 +91,13 @@ def plot_fig4_and_fig5():
         'avg_task_completion_delay': ['mean', 'std']
     }).reset_index()
 
-    v_vals = df_agg['v_value'].values
+    v_vals = [1, 10, 20, 30, 40, 50, 100]
     all_mean = df_agg['all_task_completion_delay']['mean'].values
     all_std = df_agg['all_task_completion_delay']['std'].fillna(0.0).values
     avg_mean = df_agg['avg_task_completion_delay']['mean'].values
     avg_std = df_agg['avg_task_completion_delay']['std'].fillna(0.0).values
 
-    # --- Figure 4: Bar Plot of V Impact (Mean ± Std Error Bars) ---
+    # --- Figure 4: Bar Plot of V Impact (Mean ± Standard Deviation Error Bars) ---
     fig, ax1 = plt.subplots(figsize=(8, 5))
     x = np.arange(len(v_vals))
     width = 0.35
@@ -60,32 +122,38 @@ def plot_fig4_and_fig5():
         ax2.annotate(f'{height:.2f}', xy=(rect.get_x() + rect.get_width() / 2, height),
                      xytext=(0, 3), textcoords="offset points", ha='center', va='bottom', fontsize=7)
 
-    plt.title('Fig. 4. Impact of different V values on IoT system processing capacity.', fontsize=10)
+    plt.title('Fig. 4. Impact of different V values on IoT system processing capacity (Mean ± Standard Deviation)', fontsize=10)
     fig.tight_layout()
-    plt.savefig(os.path.join(EnvConfig.FIGURES_DIR, 'fig4_v_impact.png'), dpi=300)
+    out_fig4 = os.path.join(EnvConfig.FIGURES_DIR, 'fig4_v_impact.png')
+    plt.savefig(out_fig4, dpi=300)
     plt.close()
-    print("Saved fig4_v_impact.png (Multi-Seed Mean ± Std)")
+    print(f"Saved {out_fig4} (Validated 5 Seeds)")
 
-    # --- Figure 5: Queue Fluctuations Across V Values (Shaded Variance Bands) ---
+    # --- Figure 5: Queue Fluctuations Across V Values (Shaded Standard Deviation Variance Bands) ---
     fig, (ax_mes, ax_ed) = plt.subplots(2, 1, figsize=(8, 6), sharex=True)
     colors = ['black', 'blue', 'red', 'green', 'magenta', 'cyan', 'brown']
 
+    total_fig5_validated = 0
     for idx, v in enumerate(v_vals):
-        q_files = glob.glob(os.path.join(EnvConfig.RAW_RESULTS_DIR, f"fig5_queues_V{v}_seed*.csv"))
-        if q_files:
-            dfs = [pd.read_csv(f) for f in q_files]
-            t_steps = dfs[0]['slot'].values
-            mes_matrix = np.array([df_q['mes_queue_bits'].values for df_q in dfs])
-            ed_matrix = np.array([df_q['ed_queue_bits'].values for df_q in dfs])
+        expected_files = [
+            os.path.join(EnvConfig.RAW_RESULTS_DIR, f"fig5_queues_V{v}_seed{seed}.csv")
+            for seed in EXPECTED_SEEDS
+        ]
+        dfs = validate_queue_files(expected_files)
+        total_fig5_validated += len(dfs)
 
-            mes_m, mes_s = np.mean(mes_matrix, axis=0), np.std(mes_matrix, axis=0)
-            ed_m, ed_s = np.mean(ed_matrix, axis=0), np.std(ed_matrix, axis=0)
+        t_steps = dfs[0]['slot'].values
+        mes_matrix = np.array([df_q['mes_queue_bits'].values for df_q in dfs])
+        ed_matrix = np.array([df_q['ed_queue_bits'].values for df_q in dfs])
 
-            ax_mes.plot(t_steps, mes_m, label=f'V={v}', color=colors[idx % len(colors)], linewidth=1.2)
-            ax_mes.fill_between(t_steps, mes_m - mes_s, mes_m + mes_s, color=colors[idx % len(colors)], alpha=0.15)
+        mes_m, mes_s = np.mean(mes_matrix, axis=0), np.std(mes_matrix, axis=0)
+        ed_m, ed_s = np.mean(ed_matrix, axis=0), np.std(ed_matrix, axis=0)
 
-            ax_ed.plot(t_steps, ed_m, label=f'V={v}', color=colors[idx % len(colors)], linewidth=1.2)
-            ax_ed.fill_between(t_steps, ed_m - ed_s, ed_m + ed_s, color=colors[idx % len(colors)], alpha=0.15)
+        ax_mes.plot(t_steps, mes_m, label=f'V={v}', color=colors[idx % len(colors)], linewidth=1.2)
+        ax_mes.fill_between(t_steps, mes_m - mes_s, mes_m + mes_s, color=colors[idx % len(colors)], alpha=0.15)
+
+        ax_ed.plot(t_steps, ed_m, label=f'V={v}', color=colors[idx % len(colors)], linewidth=1.2)
+        ax_ed.fill_between(t_steps, ed_m - ed_s, ed_m + ed_s, color=colors[idx % len(colors)], alpha=0.15)
 
     ax_mes.set_ylabel('Average MES awaiting task size (bit)')
     ax_mes.set_title('(a) Average MES awaiting task size (bit)')
@@ -97,18 +165,18 @@ def plot_fig4_and_fig5():
     ax_ed.set_title('(b) Average ED awaiting task size (bit)')
     ax_ed.grid(True, linestyle=':', alpha=0.6)
 
-    fig.suptitle('Fig. 5. Impact of different V values on IoT system fluctuations.', fontsize=10)
+    fig.suptitle('Fig. 5. Impact of different V values on IoT system fluctuations (Mean ± Standard Deviation)', fontsize=10)
     fig.tight_layout()
-    plt.savefig(os.path.join(EnvConfig.FIGURES_DIR, 'fig5_v_fluctuations.png'), dpi=300)
+    out_fig5 = os.path.join(EnvConfig.FIGURES_DIR, 'fig5_v_fluctuations.png')
+    plt.savefig(out_fig5, dpi=300)
     plt.close()
-    print("Saved fig5_v_fluctuations.png (Multi-Seed Shaded Variance)")
+    print(f"Saved {out_fig5} (Validated {total_fig5_validated} Raw Files)")
 
 
 def plot_fig6_and_fig7():
     summary_path = os.path.join(EnvConfig.PROCESSED_RESULTS_DIR, "fig6_fig7_summary.csv")
     if not os.path.exists(summary_path):
-        print(f"Warning: {summary_path} not found. Skipping Fig 6 & 7.")
-        return
+        raise FileNotFoundError(f"Required summary file missing: {summary_path}")
 
     df = pd.read_csv(summary_path)
     df_agg = df.groupby('label').agg({
@@ -152,55 +220,61 @@ def plot_fig6_and_fig7():
         ax2.annotate(f'{r.get_height():.4f}', (r.get_x() + r.get_width() / 2, r.get_height()),
                      xytext=(0, 3), textcoords="offset points", ha='center', va='bottom', fontsize=8)
 
-    plt.title('Fig. 6. Effectiveness validation of network parameter reset strategy.', fontsize=10)
+    plt.title('Fig. 6. Effectiveness validation of network parameter reset strategy (Mean ± Standard Deviation)', fontsize=10)
     fig.tight_layout()
-    plt.savefig(os.path.join(EnvConfig.FIGURES_DIR, 'fig6_reset_ablation.png'), dpi=300)
+    out_fig6 = os.path.join(EnvConfig.FIGURES_DIR, 'fig6_reset_ablation.png')
+    plt.savefig(out_fig6, dpi=300)
     plt.close()
-    print("Saved fig6_reset_ablation.png (Multi-Seed Mean ± Std)")
+    print(f"Saved {out_fig6} (Validated 5 Seeds)")
 
     # --- Figure 7: Queue Fluctuations for Reset vs No-Reset ---
     fig, (ax_ed, ax_mes) = plt.subplots(2, 1, figsize=(8, 6), sharex=True)
 
-    q_files_lrma = glob.glob(os.path.join(EnvConfig.RAW_RESULTS_DIR, "fig7_queues_resetTrue_seed*.csv"))
-    q_files_noreset = glob.glob(os.path.join(EnvConfig.RAW_RESULTS_DIR, "fig7_queues_resetFalse_seed*.csv"))
+    files_reset = [
+        os.path.join(EnvConfig.RAW_RESULTS_DIR, f"fig7_queues_resetTrue_seed{seed}.csv")
+        for seed in EXPECTED_SEEDS
+    ]
+    files_noreset = [
+        os.path.join(EnvConfig.RAW_RESULTS_DIR, f"fig7_queues_resetFalse_seed{seed}.csv")
+        for seed in EXPECTED_SEEDS
+    ]
 
-    if q_files_lrma and q_files_noreset:
-        dfs_l = [pd.read_csv(f) for f in q_files_lrma]
-        dfs_n = [pd.read_csv(f) for f in q_files_noreset]
-        t_steps = dfs_l[0]['slot'].values
+    dfs_l = validate_queue_files(files_reset)
+    dfs_n = validate_queue_files(files_noreset)
 
-        ed_l_m = np.mean([df_q['ed_queue_bits'].values for df_q in dfs_l], axis=0)
-        ed_n_m = np.mean([df_q['ed_queue_bits'].values for df_q in dfs_n], axis=0)
-        mes_l_m = np.mean([df_q['mes_queue_bits'].values for df_q in dfs_l], axis=0)
-        mes_n_m = np.mean([df_q['mes_queue_bits'].values for df_q in dfs_n], axis=0)
+    t_steps = dfs_l[0]['slot'].values
+    ed_l_m = np.mean([df_q['ed_queue_bits'].values for df_q in dfs_l], axis=0)
+    ed_n_m = np.mean([df_q['ed_queue_bits'].values for df_q in dfs_n], axis=0)
+    mes_l_m = np.mean([df_q['mes_queue_bits'].values for df_q in dfs_l], axis=0)
+    mes_n_m = np.mean([df_q['mes_queue_bits'].values for df_q in dfs_n], axis=0)
 
-        ax_ed.plot(t_steps, ed_l_m, color='red', label='LRMA algorithm', linewidth=1.2)
-        ax_ed.plot(t_steps, ed_n_m, color='skyblue', label='No-reset LRMA algorithm', linewidth=1.2)
-        ax_ed.set_ylabel('Average ED awaiting task size (bit)')
-        ax_ed.set_title('(a) Average ED awaiting task size (bit)')
-        ax_ed.legend(loc='upper right')
-        ax_ed.grid(True, linestyle=':', alpha=0.6)
+    ax_ed.plot(t_steps, ed_l_m, color='red', label='LRMA algorithm', linewidth=1.2)
+    ax_ed.plot(t_steps, ed_n_m, color='skyblue', label='No-reset LRMA algorithm', linewidth=1.2)
+    ax_ed.set_ylabel('Average ED awaiting task size (bit)')
+    ax_ed.set_title('(a) Average ED awaiting task size (bit)')
+    ax_ed.legend(loc='upper right')
+    ax_ed.grid(True, linestyle=':', alpha=0.6)
 
-        ax_mes.plot(t_steps, mes_l_m, color='red', label='LRMA algorithm', linewidth=1.2)
-        ax_mes.plot(t_steps, mes_n_m, color='skyblue', label='No-reset LRMA algorithm', linewidth=1.2)
-        ax_mes.set_ylabel('Average MES awaiting task size (bit)')
-        ax_mes.set_xlabel('Times (s)')
-        ax_mes.set_title('(b) Average MES awaiting task size (bit)')
-        ax_mes.legend(loc='upper left')
-        ax_mes.grid(True, linestyle=':', alpha=0.6)
+    ax_mes.plot(t_steps, mes_l_m, color='red', label='LRMA algorithm', linewidth=1.2)
+    ax_mes.plot(t_steps, mes_n_m, color='skyblue', label='No-reset LRMA algorithm', linewidth=1.2)
+    ax_mes.set_ylabel('Average MES awaiting task size (bit)')
+    ax_mes.set_xlabel('Times (s)')
+    ax_mes.set_title('(b) Average MES awaiting task size (bit)')
+    ax_mes.legend(loc='upper left')
+    ax_mes.grid(True, linestyle=':', alpha=0.6)
 
     fig.suptitle('Fig. 7. Effectiveness validation of network parameter reset strategy.', fontsize=10)
     fig.tight_layout()
-    plt.savefig(os.path.join(EnvConfig.FIGURES_DIR, 'fig7_reset_fluctuations.png'), dpi=300)
+    out_fig7 = os.path.join(EnvConfig.FIGURES_DIR, 'fig7_reset_fluctuations.png')
+    plt.savefig(out_fig7, dpi=300)
     plt.close()
-    print("Saved fig7_reset_fluctuations.png")
+    print(f"Saved {out_fig7} (Validated 10 Raw Files)")
 
 
 def plot_fig8():
     summary_path = os.path.join(EnvConfig.PROCESSED_RESULTS_DIR, "fig8_summary.csv")
     if not os.path.exists(summary_path):
-        print(f"Warning: {summary_path} not found. Skipping Fig 8.")
-        return
+        raise FileNotFoundError(f"Required summary file missing: {summary_path}")
 
     df = pd.read_csv(summary_path)
     fig = plt.figure(figsize=(12, 8))
@@ -231,21 +305,27 @@ def plot_fig8():
                     (25, 3, '(c) IoT system queue fluctuations (ED=25)'),
                     (30, 4, '(d) IoT system queue fluctuations (ED=30)')]
 
+    total_fig8_validated = 0
     for u_val, sub_idx, title in user_configs:
         ax = plt.subplot(2, 2, sub_idx)
-        q_fcfs = glob.glob(os.path.join(EnvConfig.RAW_RESULTS_DIR, f"fig8_queues_FCFS_N{u_val}_seed*.csv"))
-        q_mmc = glob.glob(os.path.join(EnvConfig.RAW_RESULTS_DIR, f"fig8_queues_MMC_N{u_val}_seed*.csv"))
-        q_mhfq = glob.glob(os.path.join(EnvConfig.RAW_RESULTS_DIR, f"fig8_queues_MHFQ_N{u_val}_seed*.csv"))
+        files_fcfs = [os.path.join(EnvConfig.RAW_RESULTS_DIR, f"fig8_queues_FCFS_N{u_val}_seed{seed}.csv") for seed in EXPECTED_SEEDS]
+        files_mmc = [os.path.join(EnvConfig.RAW_RESULTS_DIR, f"fig8_queues_MMC_N{u_val}_seed{seed}.csv") for seed in EXPECTED_SEEDS]
+        files_mhfq = [os.path.join(EnvConfig.RAW_RESULTS_DIR, f"fig8_queues_MHFQ_N{u_val}_seed{seed}.csv") for seed in EXPECTED_SEEDS]
 
-        if q_fcfs and q_mmc and q_mhfq:
-            df_f_m = np.mean([pd.read_csv(f)['ed_queue_bits'].values for f in q_fcfs], axis=0)
-            df_m_m = np.mean([pd.read_csv(f)['ed_queue_bits'].values for f in q_mmc], axis=0)
-            df_h_m = np.mean([pd.read_csv(f)['ed_queue_bits'].values for f in q_mhfq], axis=0)
-            t_steps = pd.read_csv(q_fcfs[0])['slot'].values
+        dfs_f = validate_queue_files(files_fcfs)
+        dfs_m = validate_queue_files(files_mmc)
+        dfs_h = validate_queue_files(files_mhfq)
 
-            ax.plot(t_steps, df_f_m, color='steelblue', label='FCFS task tackling queue', linewidth=1.2)
-            ax.plot(t_steps, df_m_m, color='lightcoral', label='M/M/C queue', linewidth=1.2)
-            ax.plot(t_steps, df_h_m, color='red', label='Ours (MHFQ)', linewidth=1.2)
+        total_fig8_validated += (len(dfs_f) + len(dfs_m) + len(dfs_h))
+
+        df_f_m = np.mean([df_q['ed_queue_bits'].values for df_q in dfs_f], axis=0)
+        df_m_m = np.mean([df_q['ed_queue_bits'].values for df_q in dfs_m], axis=0)
+        df_h_m = np.mean([df_q['ed_queue_bits'].values for df_q in dfs_h], axis=0)
+        t_steps = dfs_f[0]['slot'].values
+
+        ax.plot(t_steps, df_f_m, color='steelblue', label='FCFS task tackling queue', linewidth=1.2)
+        ax.plot(t_steps, df_m_m, color='lightcoral', label='M/M/C queue', linewidth=1.2)
+        ax.plot(t_steps, df_h_m, color='red', label='Ours (MHFQ)', linewidth=1.2)
 
         ax.set_xlabel('Times (s)')
         ax.set_ylabel('Average ED awaiting task size (bit)')
@@ -255,16 +335,16 @@ def plot_fig8():
 
     fig.suptitle('Fig. 8. Comparison of MHFQ framework performance.', fontsize=11, fontweight='bold')
     fig.tight_layout()
-    plt.savefig(os.path.join(EnvConfig.FIGURES_DIR, 'fig8_mhfq_comparison.png'), dpi=300)
+    out_fig8 = os.path.join(EnvConfig.FIGURES_DIR, 'fig8_mhfq_comparison.png')
+    plt.savefig(out_fig8, dpi=300)
     plt.close()
-    print("Saved fig8_mhfq_comparison.png")
+    print(f"Saved {out_fig8} (Validated {total_fig8_validated} Raw Files)")
 
 
 def plot_fig9_and_fig10():
     summary_path = os.path.join(EnvConfig.PROCESSED_RESULTS_DIR, "fig9_fig10_summary.csv")
     if not os.path.exists(summary_path):
-        print(f"Warning: {summary_path} not found. Skipping Fig 9 & 10.")
-        return
+        raise FileNotFoundError(f"Required summary file missing: {summary_path}")
 
     df = pd.read_csv(summary_path)
     algs = ['LRMA', 'MA3MCO', 'L-MADDPG', 'DVCCO']
@@ -310,36 +390,49 @@ def plot_fig9_and_fig10():
 
     fig.suptitle('Fig. 9. Impact of different algorithms on IoT processing power.', fontsize=11, fontweight='bold')
     fig.tight_layout()
-    plt.savefig(os.path.join(EnvConfig.FIGURES_DIR, 'fig9_algorithm_power.png'), dpi=300)
+    out_fig9 = os.path.join(EnvConfig.FIGURES_DIR, 'fig9_algorithm_power.png')
+    plt.savefig(out_fig9, dpi=300)
     plt.close()
-    print("Saved fig9_algorithm_power.png")
+    print(f"Saved {out_fig9} (Validated Summary Data)")
 
     # --- Figure 10: Queue Fluctuations per Algorithm & Rate ---
     fig, axes = plt.subplots(2, 3, figsize=(14, 7), sharex=True)
-    rate_labels = ['40%', '60%', '80%']
+    rate_labels = ['40pct', '60pct', '80pct']
+    display_rates = ['40%', '60%', '80%']
     colors = {'MA3MCO': 'orange', 'L-MADDPG': 'steelblue', 'DVCCO': 'green', 'LRMA': 'red'}
 
-    for col_idx, r_lbl in enumerate(rate_labels):
+    total_fig10_validated = 0
+    for col_idx, (r_lbl, d_lbl) in enumerate(zip(rate_labels, display_rates)):
         ax_ed = axes[0, col_idx]
         ax_mes = axes[1, col_idx]
 
         for alg in algs:
-            q_files = glob.glob(os.path.join(EnvConfig.RAW_RESULTS_DIR, f"fig10_queues_{alg}_{r_lbl}_seed*.csv"))
-            if q_files:
-                dfs = [pd.read_csv(f) for f in q_files]
-                t_steps = dfs[0]['slot'].values
-                ed_m = np.mean([df_q['ed_queue_bits'].values for df_q in dfs], axis=0)
-                mes_m = np.mean([df_q['mes_queue_bits'].values for df_q in dfs], axis=0)
+            expected_files = [
+                os.path.join(EnvConfig.RAW_RESULTS_DIR, f"fig10_queues_{alg}_{r_lbl}_seed{seed}.csv")
+                for seed in EXPECTED_SEEDS
+            ]
+            dfs = validate_queue_files(expected_files)
+            total_fig10_validated += len(dfs)
 
-                ax_ed.plot(t_steps, ed_m, color=colors[alg], label=f'{alg} algorithm', linewidth=1.2)
-                ax_mes.plot(t_steps, mes_m, color=colors[alg], label=f'{alg} algorithm', linewidth=1.2)
+            t_steps = dfs[0]['slot'].values
+            ed_matrix = np.array([df_q['ed_queue_bits'].values for df_q in dfs])
+            mes_matrix = np.array([df_q['mes_queue_bits'].values for df_q in dfs])
 
-        ax_ed.set_title(f'({chr(97 + col_idx*2)}) ED queue fluctuations ({r_lbl})')
+            ed_m, ed_s = np.mean(ed_matrix, axis=0), np.std(ed_matrix, axis=0)
+            mes_m, mes_s = np.mean(mes_matrix, axis=0), np.std(mes_matrix, axis=0)
+
+            ax_ed.plot(t_steps, ed_m, color=colors[alg], label=f'{alg} algorithm', linewidth=1.2)
+            ax_ed.fill_between(t_steps, ed_m - ed_s, ed_m + ed_s, color=colors[alg], alpha=0.1)
+
+            ax_mes.plot(t_steps, mes_m, color=colors[alg], label=f'{alg} algorithm', linewidth=1.2)
+            ax_mes.fill_between(t_steps, mes_m - mes_s, mes_m + mes_s, color=colors[alg], alpha=0.1)
+
+        ax_ed.set_title(f'({chr(97 + col_idx*2)}) ED queue fluctuations ({d_lbl}) (Mean ± Std)')
         ax_ed.set_ylabel('Average ED awaiting task size (bit)')
         ax_ed.legend(loc='upper left', fontsize=7)
         ax_ed.grid(True, linestyle=':', alpha=0.6)
 
-        ax_mes.set_title(f'({chr(98 + col_idx*2)}) MES queue fluctuations ({r_lbl})')
+        ax_mes.set_title(f'({chr(98 + col_idx*2)}) MES queue fluctuations ({d_lbl}) (Mean ± Std)')
         ax_mes.set_ylabel('Average MES awaiting task size (bit)')
         ax_mes.set_xlabel('Times (s)')
         ax_mes.legend(loc='upper left', fontsize=7)
@@ -347,12 +440,14 @@ def plot_fig9_and_fig10():
 
     fig.suptitle('Fig. 10. Comparison of IoT awaiting task curve fluctuations based on different algorithms.', fontsize=11, fontweight='bold')
     fig.tight_layout()
-    plt.savefig(os.path.join(EnvConfig.FIGURES_DIR, 'fig10_algorithm_fluctuations.png'), dpi=300)
+    out_fig10 = os.path.join(EnvConfig.FIGURES_DIR, 'fig10_algorithm_fluctuations.png')
+    plt.savefig(out_fig10, dpi=300)
     plt.close()
-    print("Saved fig10_algorithm_fluctuations.png")
+    print(f"Saved {out_fig10} (Validated {total_fig10_validated} Raw Files)")
 
 
 def main():
+    os.makedirs(EnvConfig.FIGURES_DIR, exist_ok=True)
     print("=" * 70)
     print("Generating Paper Figures 4-10 (Multi-Seed Mean ± Std) Dynamically from Simulation Results")
     print("=" * 70)
