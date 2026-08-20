@@ -1,0 +1,5189 @@
+{
+  "seed": 46,
+  "dataset_split": "test",
+  "num_ed": 25,
+  "arrival_rate": 0.4,
+  "total_slots": 100,
+  "workload": {
+    "1": [
+      {
+        "task_id": "openb-pod-5638_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 1,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 14.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-4840_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 1,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 864.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-0289_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 1,
+        "cpu_milli": 12500.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 0,
+        "duration": 268.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-0011_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 1,
+        "cpu_milli": 6000.0,
+        "gpu_milli": 460.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 6508423.0,
+        "size_bits": 60000000.0
+      },
+      {
+        "task_id": "openb-pod-2898_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 1,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 320.0,
+        "gpu_spec": "P100",
+        "gpu_type": 2,
+        "duration": 3677.0,
+        "size_bits": 40000000.0
+      }
+    ],
+    "2": [
+      {
+        "task_id": "openb-pod-3169_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 2,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "P100",
+        "gpu_type": 1,
+        "duration": 470.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-1390_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 2,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 221.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-6403_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 2,
+        "cpu_milli": 88000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 17759.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-3312_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 2,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 320.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 60.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-3743_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 2,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 3942.0,
+        "size_bits": 40000000.0
+      }
+    ],
+    "3": [
+      {
+        "task_id": "openb-pod-0342_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 3,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "V100M16|V100M32",
+        "gpu_type": 1,
+        "duration": 3599.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-3142_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 3,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 278.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-6296_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 3,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "G3",
+        "gpu_type": 1,
+        "duration": 342.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-7431_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 3,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "T4",
+        "gpu_type": 2,
+        "duration": 71.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-3117_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 3,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 650.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 755.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "4": [
+      {
+        "task_id": "openb-pod-5523_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 4,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 320.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 3118.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-6858_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 4,
+        "cpu_milli": 16400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 2609.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6411_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 4,
+        "cpu_milli": 9810.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 428.0,
+        "size_bits": 98100000.0
+      },
+      {
+        "task_id": "openb-pod-5591_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 4,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 220.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 11400.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-6675_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 4,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 230.0,
+        "size_bits": 31520000.0
+      }
+    ],
+    "5": [
+      {
+        "task_id": "openb-pod-3145_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 5,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 188.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-6922_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 5,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 634.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-6634_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 5,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 566.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-2784_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 5,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 1377.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-4158_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 5,
+        "cpu_milli": 15200.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 2458.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "6": [
+      {
+        "task_id": "openb-pod-2314_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 6,
+        "cpu_milli": 32000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 0,
+        "duration": 149.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-7996_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 6,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "G2",
+        "gpu_type": 1,
+        "duration": 2971.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-0190_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 6,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "T4",
+        "gpu_type": 3,
+        "duration": 193.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-3146_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 6,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 344.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-4876_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 6,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 650.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 1572.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "7": [
+      {
+        "task_id": "openb-pod-3162_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 7,
+        "cpu_milli": 9810.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 790.0,
+        "size_bits": 98100000.0
+      },
+      {
+        "task_id": "openb-pod-1535_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 7,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 184.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-7399_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 7,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 650.0,
+        "gpu_spec": "P100",
+        "gpu_type": 3,
+        "duration": 391.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-1058_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 7,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 0,
+        "duration": 17041.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-7273_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 7,
+        "cpu_milli": 6000.0,
+        "gpu_milli": 460.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 21598.0,
+        "size_bits": 60000000.0
+      }
+    ],
+    "8": [
+      {
+        "task_id": "openb-pod-0114_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 8,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 590.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 9.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-3575_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 8,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 67.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-7486_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 8,
+        "cpu_milli": 16400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 419.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-0560_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 8,
+        "cpu_milli": 32000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 0,
+        "duration": 181.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-0356_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 8,
+        "cpu_milli": 32000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 0,
+        "duration": 149.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "9": [
+      {
+        "task_id": "openb-pod-7585_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 9,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 152.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-1058_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 9,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "G2",
+        "gpu_type": 1,
+        "duration": 197.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-4277_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 9,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 219.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-3103_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 9,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 650.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 1178.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-4704_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 9,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 770.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "10": [
+      {
+        "task_id": "openb-pod-5603_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 10,
+        "cpu_milli": 18708.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 118.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-2846_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 10,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 160.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 128.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-5633_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 10,
+        "cpu_milli": 12500.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 0,
+        "duration": 192.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-3310_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 10,
+        "cpu_milli": 16000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "G3",
+        "gpu_type": 2,
+        "duration": 65231.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-4974_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 10,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 650.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 412.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "11": [
+      {
+        "task_id": "openb-pod-5183_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 11,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 531.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-4619_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 11,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 98.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6506_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 11,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 650.0,
+        "gpu_spec": "P100",
+        "gpu_type": 1,
+        "duration": 530.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-1744_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 11,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 10618.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-0290_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 11,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 0,
+        "duration": 22410.0,
+        "size_bits": 80000000.0
+      }
+    ],
+    "12": [
+      {
+        "task_id": "openb-pod-6932_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 12,
+        "cpu_milli": 6000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "G2|P100|T4|V100M16|V100M32",
+        "gpu_type": 2,
+        "duration": 4620.0,
+        "size_bits": 60000000.0
+      },
+      {
+        "task_id": "openb-pod-2934_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 12,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 94.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-2319_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 12,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 1517.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-1597_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 12,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 320.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 91.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-4939_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 12,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 1959.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "13": [
+      {
+        "task_id": "openb-pod-5727_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 13,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 320.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 41.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-1396_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 13,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 39440.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-2706_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 13,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 220.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 7389.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-0774_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 13,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 155.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-3006_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 13,
+        "cpu_milli": 15700.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 94.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "14": [
+      {
+        "task_id": "openb-pod-6335_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 14,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 266.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-1319_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 14,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 221.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-0501_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 14,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 230.0,
+        "gpu_spec": "P100",
+        "gpu_type": 2,
+        "duration": 568.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-2842_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 14,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 4396.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6601_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 14,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 5281.0,
+        "size_bits": 80000000.0
+      }
+    ],
+    "15": [
+      {
+        "task_id": "openb-pod-0030_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 15,
+        "cpu_milli": 12500.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 0,
+        "duration": 407.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6387_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 15,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 310.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6279_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 15,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 320.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 1298.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-8129_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 15,
+        "cpu_milli": 12000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 20221.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-1147_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 15,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "T4",
+        "gpu_type": 2,
+        "duration": 105.0,
+        "size_bits": 80000000.0
+      }
+    ],
+    "16": [
+      {
+        "task_id": "openb-pod-5792_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 16,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "G2",
+        "gpu_type": 2,
+        "duration": 4228.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-1705_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 16,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 79.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-1449_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 16,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 288.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-6355_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 16,
+        "cpu_milli": 32000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 0,
+        "duration": 152.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-7398_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 16,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 213.0,
+        "size_bits": 31520000.0
+      }
+    ],
+    "17": [
+      {
+        "task_id": "openb-pod-1543_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 17,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 220.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 4554.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-3056_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 17,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 148.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-5482_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 17,
+        "cpu_milli": 16000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 1506.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-1382_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 17,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 1172.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-5680_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 17,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 946.0,
+        "size_bits": 31520000.0
+      }
+    ],
+    "18": [
+      {
+        "task_id": "openb-pod-5532_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 18,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "G2",
+        "gpu_type": 2,
+        "duration": 871.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-1718_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 18,
+        "cpu_milli": 18708.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 99.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-5827_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 18,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 1018.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-3309_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 18,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 647.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-7325_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 18,
+        "cpu_milli": 6000.0,
+        "gpu_milli": 460.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 539.0,
+        "size_bits": 60000000.0
+      }
+    ],
+    "19": [
+      {
+        "task_id": "openb-pod-6932_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 19,
+        "cpu_milli": 6000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 4620.0,
+        "size_bits": 60000000.0
+      },
+      {
+        "task_id": "openb-pod-1064_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 19,
+        "cpu_milli": 4152.0,
+        "gpu_milli": 550.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 91.0,
+        "size_bits": 41520000.0
+      },
+      {
+        "task_id": "openb-pod-2034_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 19,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "P100|V100M16|V100M32",
+        "gpu_type": 3,
+        "duration": 148.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-1063_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 19,
+        "cpu_milli": 32000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 0,
+        "duration": 1946.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-7545_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 19,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 1807.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "20": [
+      {
+        "task_id": "openb-pod-1726_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 20,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 3671.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-0193_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 20,
+        "cpu_milli": 16500.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 0,
+        "duration": 112.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6142_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 20,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 278.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-5742_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 20,
+        "cpu_milli": 24200.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 2846.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6139_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 20,
+        "cpu_milli": 4152.0,
+        "gpu_milli": 370.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 1231.0,
+        "size_bits": 41520000.0
+      }
+    ],
+    "21": [
+      {
+        "task_id": "openb-pod-7429_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 21,
+        "cpu_milli": 9810.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 162.0,
+        "size_bits": 98100000.0
+      },
+      {
+        "task_id": "openb-pod-3742_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 21,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 3390.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-4406_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 21,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 3184.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-2569_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 21,
+        "cpu_milli": 6000.0,
+        "gpu_milli": 460.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 2638.0,
+        "size_bits": 60000000.0
+      },
+      {
+        "task_id": "openb-pod-3342_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 21,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 180.0,
+        "size_bits": 31520000.0
+      }
+    ],
+    "22": [
+      {
+        "task_id": "openb-pod-6150_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 22,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 2624.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-6107_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 22,
+        "cpu_milli": 9810.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 158.0,
+        "size_bits": 98100000.0
+      },
+      {
+        "task_id": "openb-pod-6062_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 22,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 150.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6546_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 22,
+        "cpu_milli": 15700.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 42.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-2008_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 22,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 480.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 7688.0,
+        "size_bits": 40000000.0
+      }
+    ],
+    "23": [
+      {
+        "task_id": "openb-pod-2340_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 23,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 192.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-5529_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 23,
+        "cpu_milli": 24200.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 989.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-2216_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 23,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 376.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-4499_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 23,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 680.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-4969_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 23,
+        "cpu_milli": 12000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 2101.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "24": [
+      {
+        "task_id": "openb-pod-4050_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 24,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 35.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-0114_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 24,
+        "cpu_milli": 16500.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 0,
+        "duration": 2569.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-0744_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 24,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 113.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-1102_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 24,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 3936.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-2715_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 24,
+        "cpu_milli": 11900.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 3263.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "25": [
+      {
+        "task_id": "openb-pod-3414_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 25,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 907.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-7886_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 25,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 367.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-4167_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 25,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 1747.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-2075_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 25,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 149.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-4934_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 25,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 367.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "26": [
+      {
+        "task_id": "openb-pod-3884_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 26,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 1124.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-1770_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 26,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 320.0,
+        "gpu_spec": "T4",
+        "gpu_type": 2,
+        "duration": 27411.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-2121_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 26,
+        "cpu_milli": 12500.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 0,
+        "duration": 116.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6103_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 26,
+        "cpu_milli": 12000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 16259.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-0500_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 26,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 149.0,
+        "size_bits": 31520000.0
+      }
+    ],
+    "27": [
+      {
+        "task_id": "openb-pod-6122_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 27,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 160.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 4440.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-7626_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 27,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 7281.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-5855_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 27,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 274.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-2651_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 27,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 650.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 1763.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-1990_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 27,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 27.0,
+        "size_bits": 31520000.0
+      }
+    ],
+    "28": [
+      {
+        "task_id": "openb-pod-6685_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 28,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 28.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-0688_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 28,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 927.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-0383_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 28,
+        "cpu_milli": 12500.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 0,
+        "duration": 529.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-5647_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 28,
+        "cpu_milli": 15400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 242.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-2471_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 28,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 137.0,
+        "size_bits": 31520000.0
+      }
+    ],
+    "29": [
+      {
+        "task_id": "openb-pod-1755_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 29,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 939.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-4541_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 29,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 220.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 138.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-3041_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 29,
+        "cpu_milli": 12000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 11519.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-2502_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 29,
+        "cpu_milli": 6000.0,
+        "gpu_milli": 160.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 568.0,
+        "size_bits": 60000000.0
+      },
+      {
+        "task_id": "openb-pod-4511_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 29,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 320.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 23537.0,
+        "size_bits": 40000000.0
+      }
+    ],
+    "30": [
+      {
+        "task_id": "openb-pod-7606_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 30,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "T4",
+        "gpu_type": 3,
+        "duration": 291.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6710_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 30,
+        "cpu_milli": 12500.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 0,
+        "duration": 296.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-0481_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 30,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 104.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-2595_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 30,
+        "cpu_milli": 6000.0,
+        "gpu_milli": 460.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 291826.0,
+        "size_bits": 60000000.0
+      },
+      {
+        "task_id": "openb-pod-3670_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 30,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 220.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 17388.0,
+        "size_bits": 40000000.0
+      }
+    ],
+    "31": [
+      {
+        "task_id": "openb-pod-1797_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 31,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 205.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-7721_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 31,
+        "cpu_milli": 9810.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 4354.0,
+        "size_bits": 98100000.0
+      },
+      {
+        "task_id": "openb-pod-4502_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 31,
+        "cpu_milli": 32000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 0,
+        "duration": 148.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-0230_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 31,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 3669.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-5642_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 31,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 166.0,
+        "size_bits": 31520000.0
+      }
+    ],
+    "32": [
+      {
+        "task_id": "openb-pod-7114_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 32,
+        "cpu_milli": 6000.0,
+        "gpu_milli": 460.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 540.0,
+        "size_bits": 60000000.0
+      },
+      {
+        "task_id": "openb-pod-5987_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 32,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 590.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 13983.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-0880_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 32,
+        "cpu_milli": 12500.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 0,
+        "duration": 707.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-4448_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 32,
+        "cpu_milli": 32200.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "V100M16|V100M32|V100M32",
+        "gpu_type": 1,
+        "duration": 2361.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-4610_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 32,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 386.0,
+        "size_bits": 80000000.0
+      }
+    ],
+    "33": [
+      {
+        "task_id": "openb-pod-1597_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 33,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 320.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 91.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-0587_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 33,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 1036.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-6139_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 33,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 223.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-6519_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 33,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 388.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-8097_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 33,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 123.0,
+        "size_bits": 31520000.0
+      }
+    ],
+    "34": [
+      {
+        "task_id": "openb-pod-2056_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 34,
+        "cpu_milli": 12000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "T4",
+        "gpu_type": 1,
+        "duration": 540.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-7860_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 34,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 236.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-2237_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 34,
+        "cpu_milli": 4152.0,
+        "gpu_milli": 550.0,
+        "gpu_spec": "P100",
+        "gpu_type": 1,
+        "duration": 72.0,
+        "size_bits": 41520000.0
+      },
+      {
+        "task_id": "openb-pod-5760_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 34,
+        "cpu_milli": 14200.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 5428.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-5814_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 34,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 23.0,
+        "size_bits": 31520000.0
+      }
+    ],
+    "35": [
+      {
+        "task_id": "openb-pod-4962_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 35,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 85.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-2095_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 35,
+        "cpu_milli": 6000.0,
+        "gpu_milli": 460.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 52560.0,
+        "size_bits": 60000000.0
+      },
+      {
+        "task_id": "openb-pod-3730_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 35,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 441.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-7003_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 35,
+        "cpu_milli": 12500.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 0,
+        "duration": 382.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6377_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 35,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 51.0,
+        "size_bits": 31520000.0
+      }
+    ],
+    "36": [
+      {
+        "task_id": "openb-pod-7262_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 36,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 872.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-0547_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 36,
+        "cpu_milli": 32000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 0,
+        "duration": 183.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-5833_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 36,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 193.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-6924_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 36,
+        "cpu_milli": 18708.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 351.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-3989_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 36,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "V100M16|V100M32|V100M32",
+        "gpu_type": 2,
+        "duration": 53.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "37": [
+      {
+        "task_id": "openb-pod-5680_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 37,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 50.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-4159_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 37,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 394.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-0918_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 37,
+        "cpu_milli": 32000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 0,
+        "duration": 146.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-2542_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 37,
+        "cpu_milli": 15400.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 0,
+        "duration": 173.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-3880_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 37,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 72.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "38": [
+      {
+        "task_id": "openb-pod-3899_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 38,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 375.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-0101_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 38,
+        "cpu_milli": 9810.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 105.0,
+        "size_bits": 98100000.0
+      },
+      {
+        "task_id": "openb-pod-2587_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 38,
+        "cpu_milli": 32000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 0,
+        "duration": 181.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-5111_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 38,
+        "cpu_milli": 6000.0,
+        "gpu_milli": 460.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 538.0,
+        "size_bits": 60000000.0
+      },
+      {
+        "task_id": "openb-pod-5947_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 38,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 320.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 791.0,
+        "size_bits": 40000000.0
+      }
+    ],
+    "39": [
+      {
+        "task_id": "openb-pod-7188_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 39,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 1479.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-3755_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 39,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 965.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-1777_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 39,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 22.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6977_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 39,
+        "cpu_milli": 32000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 0,
+        "duration": 150.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6422_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 39,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 947.0,
+        "size_bits": 80000000.0
+      }
+    ],
+    "40": [
+      {
+        "task_id": "openb-pod-1656_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 40,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 650.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 607.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6700_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 40,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "T4",
+        "gpu_type": 1,
+        "duration": 616.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-7288_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 40,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 500.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-5563_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 40,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 951.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-0609_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 40,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 350.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 58.0,
+        "size_bits": 40000000.0
+      }
+    ],
+    "41": [
+      {
+        "task_id": "openb-pod-7553_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 41,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 881.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-6886_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 41,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 320.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 2968.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-2978_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 41,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 320.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 114.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-4015_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 41,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 17.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-2194_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 41,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 394.0,
+        "size_bits": 80000000.0
+      }
+    ],
+    "42": [
+      {
+        "task_id": "openb-pod-7265_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 42,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 650.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 900.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-4453_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 42,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 104.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-4702_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 42,
+        "cpu_milli": 18708.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 185.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-4249_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 42,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 62517.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-5220_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 42,
+        "cpu_milli": 12000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 24384.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "43": [
+      {
+        "task_id": "openb-pod-0547_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 43,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "G2",
+        "gpu_type": 1,
+        "duration": 2700.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-5408_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 43,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 194.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-5219_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 43,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 946.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-7313_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 43,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 634.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-4081_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 43,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 119.0,
+        "size_bits": 31520000.0
+      }
+    ],
+    "44": [
+      {
+        "task_id": "openb-pod-3906_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 44,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 105.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-0018_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 44,
+        "cpu_milli": 12500.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 0,
+        "duration": 268.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-7719_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 44,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 247.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-1005_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 44,
+        "cpu_milli": 32000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 0,
+        "duration": 152.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-4203_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 44,
+        "cpu_milli": 18708.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 366.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "45": [
+      {
+        "task_id": "openb-pod-2243_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 45,
+        "cpu_milli": 12000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 720.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-1147_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 45,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 606.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-7189_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 45,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 114.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-5566_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 45,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 1287.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-6716_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 45,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 361.0,
+        "size_bits": 31520000.0
+      }
+    ],
+    "46": [
+      {
+        "task_id": "openb-pod-1833_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 46,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 130.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-3447_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 46,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 1529.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-4658_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 46,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 922.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-5370_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 46,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 125.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-4187_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 46,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 95.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "47": [
+      {
+        "task_id": "openb-pod-5147_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 47,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "V100M16|V100M32",
+        "gpu_type": 2,
+        "duration": 27.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-3324_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 47,
+        "cpu_milli": 4152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 867.0,
+        "size_bits": 41520000.0
+      },
+      {
+        "task_id": "openb-pod-5345_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 47,
+        "cpu_milli": 16000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 0,
+        "duration": 645.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-1393_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 47,
+        "cpu_milli": 6000.0,
+        "gpu_milli": 460.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 1080.0,
+        "size_bits": 60000000.0
+      },
+      {
+        "task_id": "openb-pod-1852_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 47,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 45.0,
+        "size_bits": 31520000.0
+      }
+    ],
+    "48": [
+      {
+        "task_id": "openb-pod-4959_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 48,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 811.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-1900_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 48,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 130.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-7665_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 48,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 650.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 1693.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-7305_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 48,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 97.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-1421_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 48,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 117.0,
+        "size_bits": 31520000.0
+      }
+    ],
+    "49": [
+      {
+        "task_id": "openb-pod-1479_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 49,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 2909.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-5852_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 49,
+        "cpu_milli": 9810.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 2398.0,
+        "size_bits": 98100000.0
+      },
+      {
+        "task_id": "openb-pod-3877_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 49,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 1.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-2313_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 49,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 143.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-2477_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 49,
+        "cpu_milli": 32000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 0,
+        "duration": 153.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "50": [
+      {
+        "task_id": "openb-pod-3477_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 50,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 21.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-6674_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 50,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 15184.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-8062_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 50,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "T4",
+        "gpu_type": 1,
+        "duration": 61.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-4658_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 50,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 160.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 8065.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-5457_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 50,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 3137.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "51": [
+      {
+        "task_id": "openb-pod-7917_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 51,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 219.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-4448_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 51,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 131.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-4563_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 51,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 650.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 1315.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-3523_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 51,
+        "cpu_milli": 18708.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 2099.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "52": [
+      {
+        "task_id": "openb-pod-5273_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 52,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 146.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-6248_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 52,
+        "cpu_milli": 12000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 3717.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-1366_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 52,
+        "cpu_milli": 16000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 0,
+        "duration": 37472.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6119_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 52,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 650.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 385.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-3369_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 52,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 230.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 728.0,
+        "size_bits": 40000000.0
+      }
+    ],
+    "53": [
+      {
+        "task_id": "openb-pod-5192_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 53,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 428.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-4050_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 53,
+        "cpu_milli": 6000.0,
+        "gpu_milli": 460.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 840.0,
+        "size_bits": 60000000.0
+      },
+      {
+        "task_id": "openb-pod-2778_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 53,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 169.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-7765_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 53,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 285.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-3660_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 53,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 492.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "54": [
+      {
+        "task_id": "openb-pod-1828_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 54,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 55.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-1152_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 54,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 110.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 8.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-4904_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 54,
+        "cpu_milli": 15200.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 4445.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6849_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 54,
+        "cpu_milli": 32000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 0,
+        "duration": 151.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-2265_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 54,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 22.0,
+        "size_bits": 80000000.0
+      }
+    ],
+    "55": [
+      {
+        "task_id": "openb-pod-1662_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 55,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 493.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-8096_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 55,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 1172.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-4819_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 55,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 110.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 1063.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-6007_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 55,
+        "cpu_milli": 9810.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 97.0,
+        "size_bits": 98100000.0
+      },
+      {
+        "task_id": "openb-pod-5655_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 55,
+        "cpu_milli": 9810.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 80.0,
+        "size_bits": 98100000.0
+      }
+    ],
+    "56": [
+      {
+        "task_id": "openb-pod-5672_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 56,
+        "cpu_milli": 12000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 0,
+        "duration": 352.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-2636_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 56,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 650.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 1693.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-3679_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 56,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 1565.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-7338_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 56,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 320.0,
+        "gpu_spec": "P100",
+        "gpu_type": 1,
+        "duration": 62.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-2025_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 56,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 120.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "57": [
+      {
+        "task_id": "openb-pod-5582_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 57,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 687.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-7968_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 57,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 350.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 58.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-2837_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 57,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 1258.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-3840_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 57,
+        "cpu_milli": 32000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 0,
+        "duration": 152.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-2993_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 57,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 4.0,
+        "size_bits": 31520000.0
+      }
+    ],
+    "58": [
+      {
+        "task_id": "openb-pod-6679_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 58,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 590.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 30.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-7085_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 58,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 419.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-1636_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 58,
+        "cpu_milli": 4152.0,
+        "gpu_milli": 370.0,
+        "gpu_spec": "P100",
+        "gpu_type": 3,
+        "duration": 785.0,
+        "size_bits": 41520000.0
+      },
+      {
+        "task_id": "openb-pod-6402_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 58,
+        "cpu_milli": 16000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 0,
+        "duration": 1769.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "59": [
+      {
+        "task_id": "openb-pod-7871_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 59,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 183.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-6389_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 59,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 718.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6317_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 59,
+        "cpu_milli": 11900.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 2903.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-1954_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 59,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "G2",
+        "gpu_type": 2,
+        "duration": 1082.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-1677_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 59,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 166.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "60": [
+      {
+        "task_id": "openb-pod-5555_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 60,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 239.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6155_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 60,
+        "cpu_milli": 18708.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 338.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-4028_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 60,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 375.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-7029_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 60,
+        "cpu_milli": 12500.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 0,
+        "duration": 475.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-0003_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 60,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 0,
+        "duration": 21734.0,
+        "size_bits": 80000000.0
+      }
+    ],
+    "61": [
+      {
+        "task_id": "openb-pod-4737_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 61,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 952.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-7162_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 61,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 148.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-4516_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 61,
+        "cpu_milli": 32000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 0,
+        "duration": 180.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6506_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 61,
+        "cpu_milli": 24200.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 444.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-5737_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 61,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 494.0,
+        "size_bits": 80000000.0
+      }
+    ],
+    "62": [
+      {
+        "task_id": "openb-pod-1948_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 62,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 698.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-5584_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 62,
+        "cpu_milli": 6000.0,
+        "gpu_milli": 460.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 539.0,
+        "size_bits": 60000000.0
+      },
+      {
+        "task_id": "openb-pod-7785_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 62,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 531.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-1938_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 62,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 0,
+        "duration": 68.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-1419_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 62,
+        "cpu_milli": 12000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 853.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "63": [
+      {
+        "task_id": "openb-pod-2033_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 63,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 210.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-3371_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 63,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 14670.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-7512_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 63,
+        "cpu_milli": 18708.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 342.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-0724_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 63,
+        "cpu_milli": 12000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 2612743.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-1860_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 63,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 2155.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "64": [
+      {
+        "task_id": "openb-pod-2459_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 64,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 650.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 900.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-5739_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 64,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 427.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-7860_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 64,
+        "cpu_milli": 9810.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 80.0,
+        "size_bits": 98100000.0
+      },
+      {
+        "task_id": "openb-pod-0527_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 64,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 5.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-2930_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 64,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 240.0,
+        "size_bits": 31520000.0
+      }
+    ],
+    "65": [
+      {
+        "task_id": "openb-pod-1370_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 65,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 590.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 36.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-3913_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 65,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 320.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 443.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-1110_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 65,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 209.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-6099_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 65,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 5874.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-4712_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 65,
+        "cpu_milli": 9810.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 69.0,
+        "size_bits": 98100000.0
+      }
+    ],
+    "66": [
+      {
+        "task_id": "openb-pod-6876_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 66,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "T4",
+        "gpu_type": 3,
+        "duration": 1210.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-4065_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 66,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 141.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-4965_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 66,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 418.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-1030_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 66,
+        "cpu_milli": 12500.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 0,
+        "duration": 183.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-4962_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 66,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 85.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "67": [
+      {
+        "task_id": "openb-pod-2537_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 67,
+        "cpu_milli": 4152.0,
+        "gpu_milli": 550.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 30.0,
+        "size_bits": 41520000.0
+      },
+      {
+        "task_id": "openb-pod-6580_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 67,
+        "cpu_milli": 32000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 0,
+        "duration": 179.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-3764_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 67,
+        "cpu_milli": 16500.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 0,
+        "duration": 109.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-0024_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 67,
+        "cpu_milli": 16000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 3084194.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-7247_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 67,
+        "cpu_milli": 6000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 2999.0,
+        "size_bits": 60000000.0
+      }
+    ],
+    "68": [
+      {
+        "task_id": "openb-pod-5701_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 68,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 15175.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-1268_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 68,
+        "cpu_milli": 16500.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 0,
+        "duration": 4829.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-5335_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 68,
+        "cpu_milli": 4152.0,
+        "gpu_milli": 550.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 30.0,
+        "size_bits": 41520000.0
+      },
+      {
+        "task_id": "openb-pod-0201_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 68,
+        "cpu_milli": 32000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 0,
+        "duration": 157.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-1814_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 68,
+        "cpu_milli": 4152.0,
+        "gpu_milli": 370.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 786.0,
+        "size_bits": 41520000.0
+      }
+    ],
+    "69": [
+      {
+        "task_id": "openb-pod-4985_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 69,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 257.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-3265_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 69,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 650.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 205.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-4998_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 69,
+        "cpu_milli": 32000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 0,
+        "duration": 148.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-3729_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 69,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "T4",
+        "gpu_type": 1,
+        "duration": 7936.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-1555_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 69,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 153.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "70": [
+      {
+        "task_id": "openb-pod-7339_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 70,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 114.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-7455_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 70,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "G3",
+        "gpu_type": 2,
+        "duration": 39.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-7793_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 70,
+        "cpu_milli": 12000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 779.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-3320_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 70,
+        "cpu_milli": 4152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 10128.0,
+        "size_bits": 41520000.0
+      },
+      {
+        "task_id": "openb-pod-3124_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 70,
+        "cpu_milli": 12000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "V100M32",
+        "gpu_type": 2,
+        "duration": 1193.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "71": [
+      {
+        "task_id": "openb-pod-0321_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 71,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 114.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-1629_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 71,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 144.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-2581_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 71,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 36.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-1123_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 71,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 1853.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-5444_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 71,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 650.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 1023.0,
+        "size_bits": 80000000.0
+      }
+    ],
+    "72": [
+      {
+        "task_id": "openb-pod-4756_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 72,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 857.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-1510_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 72,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 230.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 339.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-3154_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 72,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 57.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-3094_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 72,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "T4",
+        "gpu_type": 2,
+        "duration": 290.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-5751_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 72,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 66.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "73": [
+      {
+        "task_id": "openb-pod-1673_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 73,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 261.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-0606_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 73,
+        "cpu_milli": 12500.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 0,
+        "duration": 1118.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-5459_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 73,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "G2",
+        "gpu_type": 1,
+        "duration": 1281.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6402_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 73,
+        "cpu_milli": 16000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 0,
+        "duration": 1769.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-0515_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 73,
+        "cpu_milli": 32000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 0,
+        "duration": 182.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "74": [
+      {
+        "task_id": "openb-pod-6758_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 74,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 12.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-6179_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 74,
+        "cpu_milli": 12500.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 0,
+        "duration": 783.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-5733_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 74,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 117.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-1428_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 74,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 1075.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-2729_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 74,
+        "cpu_milli": 15700.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "T4",
+        "gpu_type": 2,
+        "duration": 139.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "75": [
+      {
+        "task_id": "openb-pod-0078_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 75,
+        "cpu_milli": 16000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 1329.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-5463_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 75,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 650.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 1131.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-7993_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 75,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 257.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-2204_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 75,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 230.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 19.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-2520_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 75,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 145.0,
+        "size_bits": 80000000.0
+      }
+    ],
+    "76": [
+      {
+        "task_id": "openb-pod-4325_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 76,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 230.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 412.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-4437_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 76,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 5497.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6700_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 76,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 616.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-3453_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 76,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 350.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 58.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-7701_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 76,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 231.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "77": [
+      {
+        "task_id": "openb-pod-5886_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 77,
+        "cpu_milli": 8200.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 369.0,
+        "size_bits": 82000000.0
+      },
+      {
+        "task_id": "openb-pod-4188_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 77,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 89.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-7957_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 77,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 2507.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-0630_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 77,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 152.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-3417_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 77,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 930.0,
+        "size_bits": 31520000.0
+      }
+    ],
+    "78": [
+      {
+        "task_id": "openb-pod-1346_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 78,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 320.0,
+        "gpu_spec": "T4",
+        "gpu_type": 3,
+        "duration": 759.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-0424_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 78,
+        "cpu_milli": 12500.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 0,
+        "duration": 244.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-7436_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 78,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 650.0,
+        "gpu_spec": "P100",
+        "gpu_type": 3,
+        "duration": 234.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-2413_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 78,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 3977.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-2581_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 78,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 36.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "79": [
+      {
+        "task_id": "openb-pod-2872_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 79,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 938.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-3510_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 79,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "P100",
+        "gpu_type": 3,
+        "duration": 164.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-3093_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 79,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 146.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-7915_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 79,
+        "cpu_milli": 18708.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 502.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-5848_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 79,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 72.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "80": [
+      {
+        "task_id": "openb-pod-7655_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 80,
+        "cpu_milli": 24200.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "T4",
+        "gpu_type": 3,
+        "duration": 6366.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6118_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 80,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 27.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-8106_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 80,
+        "cpu_milli": 15700.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 80.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-2456_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 80,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 234.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-0005_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 80,
+        "cpu_milli": 20000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 0,
+        "duration": 10143286.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "81": [
+      {
+        "task_id": "openb-pod-6073_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 81,
+        "cpu_milli": 14200.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "V100M16|V100M32",
+        "gpu_type": 1,
+        "duration": 12967.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6114_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 81,
+        "cpu_milli": 12000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 21636.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-4608_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 81,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 28.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-0502_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 81,
+        "cpu_milli": 15400.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 0,
+        "duration": 1148.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-0826_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 81,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 0,
+        "duration": 20547.0,
+        "size_bits": 80000000.0
+      }
+    ],
+    "82": [
+      {
+        "task_id": "openb-pod-7876_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 82,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 164.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6166_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 82,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 113.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-3671_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 82,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 320.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 30535.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-6785_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 82,
+        "cpu_milli": 18708.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 173.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-5946_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 82,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 158.0,
+        "size_bits": 31520000.0
+      }
+    ],
+    "83": [
+      {
+        "task_id": "openb-pod-6446_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 83,
+        "cpu_milli": 9810.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 224.0,
+        "size_bits": 98100000.0
+      },
+      {
+        "task_id": "openb-pod-7557_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 83,
+        "cpu_milli": 9810.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 5079.0,
+        "size_bits": 98100000.0
+      },
+      {
+        "task_id": "openb-pod-7801_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 83,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 2323.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-0981_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 83,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "T4",
+        "gpu_type": 1,
+        "duration": 395.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-7206_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 83,
+        "cpu_milli": 24200.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 2412.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "84": [
+      {
+        "task_id": "openb-pod-0405_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 84,
+        "cpu_milli": 12000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 32042.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-3838_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 84,
+        "cpu_milli": 12000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 5697.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6466_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 84,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 344.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-2075_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 84,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 149.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-5911_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 84,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 37894.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "85": [
+      {
+        "task_id": "openb-pod-6743_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 85,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 196.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-6099_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 85,
+        "cpu_milli": 6000.0,
+        "gpu_milli": 50.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 28623.0,
+        "size_bits": 60000000.0
+      },
+      {
+        "task_id": "openb-pod-6502_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 85,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 43.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-3566_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 85,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "A10|G2|T4|V100M16|V100M32",
+        "gpu_type": 2,
+        "duration": 1131.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-8011_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 85,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 110.0,
+        "size_bits": 31520000.0
+      }
+    ],
+    "86": [
+      {
+        "task_id": "openb-pod-6483_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 86,
+        "cpu_milli": 16500.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 0,
+        "duration": 3051.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-7937_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 86,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 172.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-3809_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 86,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 512.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-4831_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 86,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 355.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-2142_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 86,
+        "cpu_milli": 6000.0,
+        "gpu_milli": 320.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 362.0,
+        "size_bits": 60000000.0
+      }
+    ],
+    "87": [
+      {
+        "task_id": "openb-pod-4079_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 87,
+        "cpu_milli": 12000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 1860.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-2896_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 87,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 320.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 98.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-7562_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 87,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 2552.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-0051_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 87,
+        "cpu_milli": 16500.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 0,
+        "duration": 1180.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-2843_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 87,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 36.0,
+        "size_bits": 80000000.0
+      }
+    ],
+    "88": [
+      {
+        "task_id": "openb-pod-6348_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 88,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 230.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 5184.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-0906_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 88,
+        "cpu_milli": 32000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 0,
+        "duration": 154.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-4383_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 88,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 320.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 1564.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-4864_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 88,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 149.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-8139_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 88,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 515.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "89": [
+      {
+        "task_id": "openb-pod-2656_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 89,
+        "cpu_milli": 32000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 0,
+        "duration": 161.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-0394_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 89,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 0,
+        "duration": 176.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-6324_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 89,
+        "cpu_milli": 16000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 1594.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-2167_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 89,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 881.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-2944_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 89,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 320.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 791.0,
+        "size_bits": 40000000.0
+      }
+    ],
+    "90": [
+      {
+        "task_id": "openb-pod-1783_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 90,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 214.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-6800_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 90,
+        "cpu_milli": 32000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 0,
+        "duration": 180.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6019_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 90,
+        "cpu_milli": 14200.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 2303.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-5725_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 90,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 160.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 4440.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-0461_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 90,
+        "cpu_milli": 18708.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "G2",
+        "gpu_type": 3,
+        "duration": 113.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "91": [
+      {
+        "task_id": "openb-pod-7812_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 91,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 197.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-3676_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 91,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "P100|T4|V100M16|V100M32",
+        "gpu_type": 2,
+        "duration": 129.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-0599_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 91,
+        "cpu_milli": 12500.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 0,
+        "duration": 61.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-0374_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 91,
+        "cpu_milli": 15400.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 0,
+        "duration": 143.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-2297_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 91,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 110.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 3770.0,
+        "size_bits": 40000000.0
+      }
+    ],
+    "92": [
+      {
+        "task_id": "openb-pod-7053_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 92,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 3879.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-4103_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 92,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 320.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 164.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-2235_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 92,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 201.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-3896_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 92,
+        "cpu_milli": 7000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 53894.0,
+        "size_bits": 70000000.0
+      },
+      {
+        "task_id": "openb-pod-3128_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 92,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 44.0,
+        "size_bits": 31520000.0
+      }
+    ],
+    "93": [
+      {
+        "task_id": "openb-pod-0286_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 93,
+        "cpu_milli": 18708.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "G2",
+        "gpu_type": 3,
+        "duration": 176.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-2181_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 93,
+        "cpu_milli": 6000.0,
+        "gpu_milli": 460.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 2638.0,
+        "size_bits": 60000000.0
+      },
+      {
+        "task_id": "openb-pod-7924_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 93,
+        "cpu_milli": 11300.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 279.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-0083_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 93,
+        "cpu_milli": 12500.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 0,
+        "duration": 105.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-1913_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 93,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 203.0,
+        "size_bits": 31520000.0
+      }
+    ],
+    "94": [
+      {
+        "task_id": "openb-pod-4149_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 94,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 650.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 1194.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-1117_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 94,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 28.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-2666_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 94,
+        "cpu_milli": 11400.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 554.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-3784_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 94,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "T4",
+        "gpu_type": 3,
+        "duration": 1335.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-2705_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 94,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 149.0,
+        "size_bits": 31520000.0
+      }
+    ],
+    "95": [
+      {
+        "task_id": "openb-pod-2826_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 95,
+        "cpu_milli": 6000.0,
+        "gpu_milli": 460.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 26697.0,
+        "size_bits": 60000000.0
+      },
+      {
+        "task_id": "openb-pod-1748_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 95,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 4260.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-0171_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 95,
+        "cpu_milli": 32000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 0,
+        "duration": 151.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-7400_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 95,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 139.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-0520_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 95,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 537.0,
+        "size_bits": 80000000.0
+      }
+    ],
+    "96": [
+      {
+        "task_id": "openb-pod-1287_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 96,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 222.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-3370_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 96,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpuspec20.csv",
+        "gpu_type": 2,
+        "duration": 317.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-5604_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 96,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 1617.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-6282_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 96,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 650.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 2782.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-1802_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 96,
+        "cpu_milli": 15700.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "G2",
+        "gpu_type": 1,
+        "duration": 3415.0,
+        "size_bits": 99999999.0
+      }
+    ],
+    "97": [
+      {
+        "task_id": "openb-pod-2311_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 97,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "A10|G2|P100|T4|V100M16|V100M32|V100M32",
+        "gpu_type": 1,
+        "duration": 267.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-8082_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 97,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpuspec25.csv",
+        "gpu_type": 3,
+        "duration": 307.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-2240_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 97,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 590.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 877.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-4924_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 97,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 320.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 964.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-5723_openb_pod_list_gpushare60.csv",
+        "arrival_slot": 97,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare60.csv",
+        "gpu_type": 2,
+        "duration": 2086.0,
+        "size_bits": 80000000.0
+      }
+    ],
+    "98": [
+      {
+        "task_id": "openb-pod-6190_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 98,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 143.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-3609_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 98,
+        "cpu_milli": 12000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 3,
+        "duration": 709.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-3113_openb_pod_list_gpuspec25.csv",
+        "arrival_slot": 98,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "T4",
+        "gpu_type": 3,
+        "duration": 283.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-1832_openb_pod_list_gpushare80.csv",
+        "arrival_slot": 98,
+        "cpu_milli": 11908.0,
+        "gpu_milli": 470.0,
+        "gpu_spec": "openb_pod_list_gpushare80.csv",
+        "gpu_type": 3,
+        "duration": 88.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-2682_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 98,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 209.0,
+        "size_bits": 31520000.0
+      }
+    ],
+    "99": [
+      {
+        "task_id": "openb-pod-3995_openb_pod_list_gpushare100.csv",
+        "arrival_slot": 99,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare100.csv",
+        "gpu_type": 3,
+        "duration": 201.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-1141_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 99,
+        "cpu_milli": 4152.0,
+        "gpu_milli": 370.0,
+        "gpu_spec": "T4",
+        "gpu_type": 3,
+        "duration": 1231.0,
+        "size_bits": 41520000.0
+      },
+      {
+        "task_id": "openb-pod-4787_openb_pod_list_gpuspec05.csv",
+        "arrival_slot": 99,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 590.0,
+        "gpu_spec": "openb_pod_list_gpuspec05.csv",
+        "gpu_type": 1,
+        "duration": 1125.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-4779_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 99,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 1056.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-1968_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 99,
+        "cpu_milli": 6000.0,
+        "gpu_milli": 460.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 1741.0,
+        "size_bits": 60000000.0
+      }
+    ],
+    "100": [
+      {
+        "task_id": "openb-pod-3355_openb_pod_list_gpushare40.csv",
+        "arrival_slot": 100,
+        "cpu_milli": 3152.0,
+        "gpu_milli": 810.0,
+        "gpu_spec": "openb_pod_list_gpushare40.csv",
+        "gpu_type": 2,
+        "duration": 10104.0,
+        "size_bits": 31520000.0
+      },
+      {
+        "task_id": "openb-pod-5548_openb_pod_list_gpuspec10.csv",
+        "arrival_slot": 100,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpuspec10.csv",
+        "gpu_type": 2,
+        "duration": 4004.0,
+        "size_bits": 40000000.0
+      },
+      {
+        "task_id": "openb-pod-2109_openb_pod_list_gpuspec33.csv",
+        "arrival_slot": 100,
+        "cpu_milli": 8000.0,
+        "gpu_milli": 0.0,
+        "gpu_spec": "openb_pod_list_gpuspec33.csv",
+        "gpu_type": 0,
+        "duration": 2599.0,
+        "size_bits": 80000000.0
+      },
+      {
+        "task_id": "openb-pod-5351_openb_pod_list_gpushare20.csv",
+        "arrival_slot": 100,
+        "cpu_milli": 15700.0,
+        "gpu_milli": 1000.0,
+        "gpu_spec": "openb_pod_list_gpushare20.csv",
+        "gpu_type": 1,
+        "duration": 2157.0,
+        "size_bits": 99999999.0
+      },
+      {
+        "task_id": "openb-pod-6605_openb_pod_list_gpuspec20.csv",
+        "arrival_slot": 100,
+        "cpu_milli": 4000.0,
+        "gpu_milli": 320.0,
+        "gpu_spec": "T4",
+        "gpu_type": 1,
+        "duration": 8448.0,
+        "size_bits": 40000000.0
+      }
+    ]
+  }
+}
