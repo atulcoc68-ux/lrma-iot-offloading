@@ -40,9 +40,11 @@ def train_lrma_agent(seed=42, num_ed=EnvConfig.NUM_ED, V_val=EnvConfig.V,
     set_seed(seed)
     print(f"\n--- Initializing LRMA Multi-Agent Training (Seed={seed}, N={num_ed}, V={V_val}, Reset={reset_enabled}) ---")
 
-    # 1. Load Dataset (70% Train Split)
+    # 1. Load Dataset & Generate Workload Trace once (70% Train Split)
     loader = AlibabaWorkloadLoader()
-    tasks_df = loader.train_df  # Exclusively train on training split
+    workload_by_slot = loader.generate_reproducible_slot_workload(
+        dataset_split='train', seed=seed, num_ed=num_ed, total_slots=total_slots, arrival_rate=task_arrival_rate
+    )
 
     # 2. Setup LSTM Workload Predictor
     predictor = WorkloadPredictor(input_dim=4, hidden_dim=64, output_dim=4, num_layers=2)
@@ -60,8 +62,8 @@ def train_lrma_agent(seed=42, num_ed=EnvConfig.NUM_ED, V_val=EnvConfig.V,
     cloud_primary_actor = DRLActor(state_dim_cloud, action_dim_cloud)
     cloud_target_actor = DRLActor(state_dim_cloud, action_dim_cloud)
 
-    for p, t in zip(ed_primary_actors, ed_target_actors):
-        t.load_state_dict(p.state_dict())
+    for p, t_net in zip(ed_primary_actors, ed_target_actors):
+        t_net.load_state_dict(p.state_dict())
     cloud_target_actor.load_state_dict(cloud_primary_actor.state_dict())
 
     joint_state_dim = state_dim_ed * num_ed + state_dim_cloud
@@ -85,66 +87,57 @@ def train_lrma_agent(seed=42, num_ed=EnvConfig.NUM_ED, V_val=EnvConfig.V,
     ed_queue_history = []
     mes_queue_history = []
 
-    task_pointer = 0
-    num_total_tasks = len(tasks_df)
-
     start_time = time.time()
 
     # Time-slot simulation loop t = 1 ... K (Algorithm 1, lines 4-32)
     for t in range(1, total_slots + 1):
-        # Dynamic task arrivals per slot (up to Max_n tasks per ED)
-        num_generated = min(EnvConfig.MAX_N, max(1, int(np.random.binomial(num_ed, task_arrival_rate))))
-        slot_tasks = []
-        for _ in range(num_generated):
-            row = tasks_df.iloc[task_pointer % num_total_tasks]
-            task_pointer += 1
-            t_obj = LRMATask(row['name'], t, row['cpu_milli'], row['gpu_milli'], row['gpu_spec'], row['duration'])
-            slot_tasks.append(t_obj)
-
-        env.update_time_slot(t, slot_tasks)
+        slot_workload_ed = workload_by_slot.get(t, {})
+        env.update_time_slot(t, slot_workload_ed)
 
         # Train LSTM Predictor periodically on history (Algorithm 1, lines 6-7)
         if len(env.history_arrival_states) > EnvConfig.SEQ_LENGTH + 5 and t % 30 == 0:
             train_predictor(predictor, env.history_arrival_states, epochs=1)
 
-        slot_task_records = []
         slot_reward_sum = 0.0
 
-        for task in slot_tasks:
-            ed_idx = int(hash(task.task_id) % num_ed)
+        # Process per-ED task arrivals
+        for ed_idx in range(num_ed):
+            ed_tasks = slot_workload_ed.get(ed_idx, [])
             ed_actor = ed_primary_actors[ed_idx]
 
-            # Get local ED state (Algorithm 1, line 8)
-            s_ed = env.get_ed_state(ed_idx, task, slot_tasks)
-            candidates_ed, probs_ed = point_to_uniform_quantization(ed_actor, s_ed)
-            ed_action = candidates_ed[0]
+            for task in ed_tasks:
+                # Get local ED state for ED agent ed_idx (Paper Eq. 34)
+                s_ed = env.get_ed_state(ed_idx, task, ed_tasks)
+                candidates_ed, probs_ed = point_to_uniform_quantization(ed_actor, s_ed)
+                ed_action = candidates_ed[0]
 
-            # Cloud decision for offloaded tasks (Algorithm 1, lines 16-19)
-            if ed_action > 0:
-                s_cloud = env.get_cloud_state(task, slot_tasks)
-                candidates_cloud, _ = point_to_uniform_quantization(cloud_primary_actor, s_cloud)
-                cloud_action = candidates_cloud[0]
-            else:
-                s_cloud = np.zeros(state_dim_cloud, dtype=np.float32)
-                cloud_action = 0
+                # Cloud decision for offloaded tasks (Algorithm 1, lines 16-19)
+                if ed_action > 0:
+                    flat_offloaded = [t_item for e_id in range(num_ed) for t_item in slot_workload_ed.get(e_id, [])]
+                    s_cloud = env.get_cloud_state(task, flat_offloaded)
+                    candidates_cloud, _ = point_to_uniform_quantization(cloud_primary_actor, s_cloud)
+                    cloud_action = candidates_cloud[0]
+                else:
+                    s_cloud = np.zeros(state_dim_cloud, dtype=np.float32)
+                    cloud_action = 0
 
-            # Environment step (Algorithm 1, line 30)
-            res = env.step_task_offloading(ed_idx, task, ed_action, cloud_action)
-            
-            # Compute Rewards (Paper Eq. 38, 39, 40)
-            r_ed = reward_calc.calculate_ed_individual_reward(task.size, res['delay'], env.q_device[ed_idx], task.size, res['is_offloaded'])
-            r_cloud = reward_calc.calculate_cloud_individual_reward([(task.size, res['delay'], res['mes_assigned'])], env.q_es, [task.size]*env.num_mes)
-            r_all = r_ed + r_cloud
-            r_tot = reward_calc.calculate_comprehensive_reward(r_ed, r_all)
+                # Environment step (Algorithm 1, line 30)
+                res = env.step_task_offloading(ed_idx, task, ed_action, cloud_action)
+                
+                # Compute Rewards (Paper Eq. 38, 39, 40)
+                r_ed = reward_calc.calculate_ed_individual_reward(task.size, res['delay'], env.q_device[ed_idx], task.size, res['is_offloaded'])
+                r_cloud = reward_calc.calculate_cloud_individual_reward([(task.size, res['delay'], res['mes_assigned'])], env.q_es, [task.size]*env.num_mes)
+                r_all = r_ed + r_cloud
+                r_tot = reward_calc.calculate_comprehensive_reward(r_ed, r_all)
 
-            slot_reward_sum += r_tot
-            task_delays.append(res['delay'])
-            offload_decisions.append(1 if res['is_offloaded'] else 0)
+                slot_reward_sum += r_tot
+                task_delays.append(res['delay'])
+                offload_decisions.append(1 if res['is_offloaded'] else 0)
 
-            # Store experience in buffer (Algorithm 1, line 22)
-            replay_buffer_ed.append((s_ed, ed_action, r_tot))
-            if res['is_offloaded']:
-                replay_buffer_cloud.append((s_cloud, cloud_action, r_tot))
+                # Store experience in buffer (Algorithm 1, line 22)
+                replay_buffer_ed.append((s_ed, ed_action, r_tot))
+                if res['is_offloaded']:
+                    replay_buffer_cloud.append((s_cloud, cloud_action, r_tot))
 
         slot_rewards.append(slot_reward_sum)
         ed_queue_history.append(float(np.mean(env.q_device)))

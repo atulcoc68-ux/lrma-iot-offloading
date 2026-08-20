@@ -16,12 +16,13 @@ class LRMATask:
     Paper Eq: T_{i,k}^t = {size_{i,k}^t, C_{i,k}^t, G_{i,k}^t, R_{i,k}^t}
     size_{i,k}^t = \rho * C_{i,k}^t (Eq. Section III-A)
     """
-    def __init__(self, task_id, arrival_slot, cpu_milli, gpu_milli, gpu_spec, duration, rho=EnvConfig.RHO):
+    def __init__(self, task_id, arrival_slot, cpu_milli, gpu_milli, gpu_spec, duration, ed_id=0, rho=EnvConfig.RHO):
         self.task_id = str(task_id)
         self.name = self.task_id
         self.arrival_slot = int(arrival_slot)
         self.start_slot = self.arrival_slot
         self.t_arrival = self.arrival_slot
+        self.ed_id = int(ed_id)  # Explicit ED association (Paper Eq. 19g)
         
         # CPU requirement C_{i,k}^t (in mega-cycles)
         self.C = float(cpu_milli) if pd.notna(cpu_milli) and float(cpu_milli) > 0 else 1000.0
@@ -52,12 +53,14 @@ class LRMATask:
         elif 'GPUSPEC25' in spec_upper or 'GPUSPEC33' in spec_upper or 'GPUSHARE80' in spec_upper or 'GPUSHARE100' in spec_upper:
             return 3
         else:
-            return (hash(self.task_id) % 3) + 1
+            # Fully deterministic string mapping across Python processes (no Python hash())
+            return (sum(ord(c) for c in str(self.task_id)) % 3) + 1
 
     def to_dict(self):
         return {
             'task_id': self.task_id,
             'arrival_slot': self.arrival_slot,
+            'ed_id': self.ed_id,
             'cpu_milli': self.C,
             'gpu_milli': self.G,
             'gpu_spec': self.gpu_spec_str,
@@ -66,8 +69,20 @@ class LRMATask:
             'size_bits': self.size
         }
 
+    @classmethod
+    def from_dict(cls, data):
+        return cls(
+            task_id=data['task_id'],
+            arrival_slot=data['arrival_slot'],
+            cpu_milli=data['cpu_milli'],
+            gpu_milli=data['gpu_milli'],
+            gpu_spec=data.get('gpu_spec', ''),
+            duration=data['duration'],
+            ed_id=data.get('ed_id', 0)
+        )
+
     def __repr__(self):
-        return f"LRMA_Task(ID={self.task_id}, size={self.size/8e6:.2f}MB, C={self.C}, G={self.G}, R={self.R})"
+        return f"LRMA_Task(ID={self.task_id}, ED={self.ed_id}, size={self.size/8e6:.2f}MB, C={self.C}, G={self.G}, R={self.R})"
 
 
 class AlibabaWorkloadLoader:
@@ -151,6 +166,9 @@ class AlibabaWorkloadLoader:
                                              total_slots=EnvConfig.TOTAL_SLOTS, arrival_rate=0.6):
         """
         Generates and saves deterministic 300-slot task workload sequence for seed.
+        Structured PER ED: workload_by_slot[t][ed_id] = [task1, task2, ...]
+        |m_i^t| ~ Binomial(Max_n=5, arrival_rate) for each slot t and ED i.
+        EXPLICIT ASSUMPTION: Binomial per-ED arrival process (Paper Eq. 19g).
         Guarantees ALL comparative algorithms receive the IDENTICAL task workload.
         """
         df = self.train_df if dataset_split == 'train' else self.test_df
@@ -161,16 +179,27 @@ class AlibabaWorkloadLoader:
         num_tasks = len(df)
 
         for t in range(1, total_slots + 1):
-            num_generated = min(EnvConfig.MAX_N, max(1, int(rng.binomial(num_ed, arrival_rate))))
-            slot_task_list = []
-            for _ in range(num_generated):
-                row = df.iloc[task_pointer % num_tasks]
-                task_pointer += 1
-                t_obj = LRMATask(row['task_unique_id'], t, row['cpu_milli'], row['gpu_milli'], row['gpu_spec'], row['duration'])
-                slot_task_list.append(t_obj)
-            workload_by_slot[t] = slot_task_list
+            slot_workload = {}
+            for ed_id in range(num_ed):
+                num_generated_ed = int(rng.binomial(EnvConfig.MAX_N, arrival_rate))
+                ed_task_list = []
+                for _ in range(num_generated_ed):
+                    row = df.iloc[task_pointer % num_tasks]
+                    task_pointer += 1
+                    t_obj = LRMATask(
+                        task_id=f"{row['task_unique_id']}_ed{ed_id}_slot{t}",
+                        arrival_slot=t,
+                        cpu_milli=row['cpu_milli'],
+                        gpu_milli=row['gpu_milli'],
+                        gpu_spec=row['gpu_spec'],
+                        duration=row['duration'],
+                        ed_id=ed_id
+                    )
+                    ed_task_list.append(t_obj)
+                slot_workload[ed_id] = ed_task_list
+            workload_by_slot[t] = slot_workload
 
-        # Save workload trace to disk for auditability
+        # Save workload trace to disk for auditability and exact multi-algorithm reuse
         save_path = os.path.join(EnvConfig.RAW_RESULTS_DIR, f"workload_trace_{dataset_split}_seed{seed}_N{num_ed}_rate{int(arrival_rate*100)}.json")
         json_data = {
             'seed': seed,
@@ -178,7 +207,13 @@ class AlibabaWorkloadLoader:
             'num_ed': num_ed,
             'arrival_rate': arrival_rate,
             'total_slots': total_slots,
-            'workload': {t: [task.to_dict() for task in tasks] for t, tasks in workload_by_slot.items()}
+            'workload': {
+                t: {
+                    ed_id: [task.to_dict() for task in ed_tasks]
+                    for ed_id, ed_tasks in ed_dict.items()
+                }
+                for t, ed_dict in workload_by_slot.items()
+            }
         }
         with open(save_path, 'w') as f:
             json.dump(json_data, f, indent=2)

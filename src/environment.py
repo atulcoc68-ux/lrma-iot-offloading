@@ -168,12 +168,20 @@ class LRMA_Environment:
         """Advance simulation time slot t (Paper Eq. 1-4)."""
         self.current_time_slot = slot_idx
         
+        # Flatten tasks if passed as per-ED dict: {ed_id: [tasks]}
+        if isinstance(slot_tasks, dict):
+            all_tasks = [t for ed_list in slot_tasks.values() for t in ed_list]
+        elif isinstance(slot_tasks, list):
+            all_tasks = slot_tasks
+        else:
+            all_tasks = []
+
         # Track historical arrival vector \widetilde{T}^t = [task_count, avg_size, avg_C, avg_G]
-        if slot_tasks:
-            avg_sz = np.mean([t.size for t in slot_tasks])
-            avg_c = np.mean([t.C for t in slot_tasks])
-            avg_g = np.mean([t.G for t in slot_tasks])
-            state_vec = np.array([len(slot_tasks), avg_sz / 8e6, avg_c / 1000.0, avg_g / 1000.0], dtype=np.float32)
+        if all_tasks:
+            avg_sz = np.mean([t.size for t in all_tasks])
+            avg_c = np.mean([t.C for t in all_tasks])
+            avg_g = np.mean([t.G for t in all_tasks])
+            state_vec = np.array([len(all_tasks), avg_sz / 8e6, avg_c / 1000.0, avg_g / 1000.0], dtype=np.float32)
         else:
             state_vec = np.zeros(4, dtype=np.float32)
 

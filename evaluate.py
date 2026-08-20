@@ -77,46 +77,63 @@ def evaluate_policy(algorithm='LRMA', num_ed=EnvConfig.NUM_ED, V_val=EnvConfig.V
     task_records = []
 
     for t in range(1, total_slots + 1):
-        slot_tasks = workload_by_slot.get(t, [])
-        env.update_time_slot(t, slot_tasks)
+        # Support both string keys (if loaded from JSON) and int keys
+        slot_workload_ed = workload_by_slot.get(t, workload_by_slot.get(str(t), {}))
+        
+        # Build flat list of all tasks across EDs for Cloud agent observation & global state
+        if isinstance(slot_workload_ed, dict):
+            flat_slot_tasks = []
+            for ed_key, ed_task_list in slot_workload_ed.items():
+                for t_item in ed_task_list:
+                    if isinstance(t_item, dict):
+                        flat_slot_tasks.append(LRMATask.from_dict(t_item))
+                    else:
+                        flat_slot_tasks.append(t_item)
+        else:
+            flat_slot_tasks = slot_workload_ed
 
-        for task in slot_tasks:
-            ed_idx = int(hash(task.task_id) % num_ed)
-            s_ed = env.get_ed_state(ed_idx, task, slot_tasks)
-            
-            with torch.no_grad():
-                probs_ed = actor_ed(torch.FloatTensor(s_ed).unsqueeze(0)).squeeze(0).numpy()
-                ed_action = int(np.random.choice(len(probs_ed), p=probs_ed))
+        env.update_time_slot(t, slot_workload_ed)
 
-            if ed_action > 0:
-                s_cloud = env.get_cloud_state(task, slot_tasks)
+        for ed_idx in range(num_ed):
+            ed_raw_tasks = slot_workload_ed.get(ed_idx, slot_workload_ed.get(str(ed_idx), [])) if isinstance(slot_workload_ed, dict) else []
+            ed_tasks = [LRMATask.from_dict(t_item) if isinstance(t_item, dict) else t_item for t_item in ed_raw_tasks]
+
+            for task in ed_tasks:
+                s_ed = env.get_ed_state(ed_idx, task, ed_tasks)
+                
                 with torch.no_grad():
-                    probs_cloud = actor_cloud(torch.FloatTensor(s_cloud).unsqueeze(0)).squeeze(0).numpy()
-                    cloud_action = int(np.random.choice(len(probs_cloud), p=probs_cloud))
-            else:
-                cloud_action = 0
+                    probs_ed = actor_ed(torch.FloatTensor(s_ed).unsqueeze(0)).squeeze(0).numpy()
+                    ed_action = int(np.random.choice(len(probs_ed), p=probs_ed))
 
-            res = env.step_task_offloading(ed_idx, task, ed_action, cloud_action)
+                if ed_action > 0:
+                    s_cloud = env.get_cloud_state(task, flat_slot_tasks)
+                    with torch.no_grad():
+                        probs_cloud = actor_cloud(torch.FloatTensor(s_cloud).unsqueeze(0)).squeeze(0).numpy()
+                        cloud_action = int(np.random.choice(len(probs_cloud), p=probs_cloud))
+                else:
+                    cloud_action = 0
 
-            task_delays.append(res['delay'])
-            task_energies.append(res['energy'])
-            offload_decisions.append(1 if res['is_offloaded'] else 0)
+                res = env.step_task_offloading(ed_idx, task, ed_action, cloud_action)
 
-            task_records.append({
-                'slot': t,
-                'task_id': task.task_id,
-                'ed_idx': ed_idx,
-                'task_size_bits': task.size,
-                'gpu_type': task.R,
-                'is_offloaded': res['is_offloaded'],
-                'mes_assigned': res['mes_assigned'],
-                'delay': res['delay'],
-                'energy': res['energy'],
-                'seed': seed,
-                'algorithm': algorithm,
-                'queue_type': queue_type,
-                'dataset_split': 'test'
-            })
+                task_delays.append(res['delay'])
+                task_energies.append(res['energy'])
+                offload_decisions.append(1 if res['is_offloaded'] else 0)
+
+                task_records.append({
+                    'slot': t,
+                    'task_id': task.task_id,
+                    'ed_idx': ed_idx,
+                    'task_size_bits': task.size,
+                    'gpu_type': task.R,
+                    'is_offloaded': res['is_offloaded'],
+                    'mes_assigned': res['mes_assigned'],
+                    'delay': res['delay'],
+                    'energy': res['energy'],
+                    'seed': seed,
+                    'algorithm': algorithm,
+                    'queue_type': queue_type,
+                    'dataset_split': 'test'
+                })
 
         ed_queue_history.append(float(np.mean(env.q_device)))
         mes_queue_history.append(float(np.mean(env.q_es)))
