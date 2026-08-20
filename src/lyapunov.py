@@ -1,3 +1,4 @@
+from collections import deque
 import numpy as np
 
 try:
@@ -6,51 +7,65 @@ except ModuleNotFoundError:
     from config import EnvConfig
 
 
-class VirtualLevelQueue:
+class QueuedTaskState:
     """
-    Virtual level queue Q_{j,r}^q in MHFQ (Paper Eq. 5).
-    Tracks task entry times, arrival at top of queue, processed work, and time slice.
+    Task state container retained in MHFQ level queues (Paper Section III-A.2 & III-C.2).
+    Tracks entry time, level migrations, remaining work, accumulated waiting time, and completion.
     """
-    def __init__(self, queue_level, time_slice):
-        self.queue_level = queue_level  # q \in {1, 2, 3}
-        self.time_slice = time_slice    # \tau_q^{ves}
-        self.queue = []
+    def __init__(self, task, entry_time, ed_id=None):
+        self.task = task
+        self.task_id = str(task.task_id)
+        if ed_id is not None:
+            self.ed_id = int(ed_id)
+        else:
+            self.ed_id = int(getattr(task, 'ed_id', 0))
+        self.entry_time = float(entry_time)          # Initial arrival time at MES (to_{j,r}^1)
+        self.queue_entry_time = float(entry_time)    # Entry time into current level queue
+        self.queue_level = 1                         # 1, 2, or 3
+        
+        self.remaining_cpu_cycles = float(task.C * 1e6)
+        self.remaining_gpu_cycles = float(task.G * 1e6) if task.R > 0 else 0.0
+        
+        self.accumulated_waiting_time = 0.0
+        self.service_time = 0.0
+        self.completion_time = 0.0
 
-    def enqueue_task(self, task, entry_time):
-        self.queue.append({
-            'task': task,
-            'to_time': entry_time,  # to_{j,r}^q(T_{i,k}^t)
-            'top_time': 0.0,        # top_{j,r}^q(T_{i,k}^t)
-            'cpu_processed': 0.0,   # \gamma_{j,c}^t(p)
-            'gpu_processed': 0.0    # \gamma_{j,g}^t(p)
-        })
-
-    def total_bytes(self):
-        return sum(item['task'].size for item in self.queue)
-
-    def is_empty(self):
-        return len(self.queue) == 0
+    def __repr__(self):
+        return (f"QueuedTask(ID={self.task_id}, ED={self.ed_id}, L={self.queue_level}, "
+                f"RemCPU={self.remaining_cpu_cycles:.1e}, RemGPU={self.remaining_gpu_cycles:.1e}, "
+                f"Wait={self.accumulated_waiting_time:.4f}s)")
 
 
 class MHFQProcessor:
     """
-    Multi-Level Feedback Queue for processor r at MES j (Paper Section III-A.2, Eq. 5, 14-17).
-    Q_{j,r} = {Q_{j,r}^1, Q_{j,r}^2, Q_{j,r}^3} with time slices \tau_1^{ves} < \tau_2^{ves} < \tau_3^{ves}.
+    Multi-Level Heterogeneous Feedback Queue for processor r at MES j (Paper Section III-A.2, Eq. 5, 14-18).
+    Maintains explicit task container queues Q1, Q2, Q3 with time slices \tau_1^{ves}=0.1s, \tau_2^{ves}=0.3s, \tau_3^{ves}=0.6s.
     """
     def __init__(self, mes_idx, gpu_type, time_slices=EnvConfig.TAU_VES):
         self.mes_idx = mes_idx
         self.gpu_type = gpu_type  # r \in {0, 1, 2, 3}
         self.time_slices = time_slices  # [0.1, 0.3, 0.6] seconds
-        self.q1 = VirtualLevelQueue(1, time_slices[0])
-        self.q2 = VirtualLevelQueue(2, time_slices[1])
-        self.q3 = VirtualLevelQueue(3, time_slices[2])
+        
+        # Explicit task container queues for Q1, Q2, Q3 (FIFO)
+        self.q1 = deque()
+        self.q2 = deque()
+        self.q3 = deque()
+        
+        # Auxiliary availability timelines for queue servers
+        self.avail_q1 = 0.0
+        self.avail_q2 = 0.0
+        self.avail_q3 = 0.0
 
     def get_total_backlog(self):
-        return self.q1.total_bytes() + self.q2.total_bytes() + self.q3.total_bytes()
+        """Returns total queued workload in bits across Q1, Q2, and Q3."""
+        b1 = sum(item.task.size for item in self.q1)
+        b2 = sum(item.task.size for item in self.q2)
+        b3 = sum(item.task.size for item in self.q3)
+        return b1 + b2 + b3
 
     def process_task(self, task, entry_time, f_c, f_g):
         r"""
-        Simulates task execution and migration through MHFQ levels Q^1 -> Q^2 -> Q^3 (Paper Eq. 14-18).
+        Simulates task execution and migration through explicit MHFQ queues Q1 -> Q2 -> Q3 (Paper Eq. 14-18).
         
         Calculates:
         - CPU processing delay D_{i,k,j}^{c,t} (Paper Eq. 14)
@@ -59,59 +74,97 @@ class MHFQProcessor:
         - Queue waiting time W_{i,k,j}^{BS,t} (Paper Eq. 17)
         - Completion delay \aleph_{i,k}^{BS,t} (Paper Eq. 18)
         """
-        # Task total computation requirements in cycles
-        c_req = task.C * 1e6  # CPU cycles
-        g_req = (task.G * 1e6) if task.R > 0 else 0.0  # GPU cycles
+        # 1. Instantiate Task State & Enqueue into Q1
+        task_state = QueuedTaskState(task, entry_time)
+        self.q1.append(task_state)
 
-        c_time_total = c_req / max(1e6, f_c)
-        g_time_total = (g_req / max(1e6, f_g)) if g_req > 0 else 0.0
-        pure_compute_time = max(c_time_total, g_time_total)
-
-        # -------------------------------------------------------------
-        # Level 1 Queue Q_{j,r}^1 (Time slice \tau_1^{ves})
-        # -------------------------------------------------------------
-        w1 = max(0.005, self.q1.total_bytes() / (f_c / 8e6 + 1e-5))
-        top1 = entry_time + w1  # top_{j,r}^1(T_{i,k}^t)
-        exec1 = min(pure_compute_time, self.time_slices[0])
-        rem1 = max(0.0, pure_compute_time - exec1)
-
-        if rem1 <= 1e-6:
-            # Task completed in Q^1 (SC^{t,1} = 0)
-            d_bs = exec1
-            w_bs = w1
-            to1 = entry_time
-            completion_delay = to1 + w_bs + d_bs
-            return d_bs, w_bs, completion_delay
+        fc_rate = max(1e6, float(f_c))
+        fg_rate = max(1e6, float(f_g)) if task.R > 0 else 1.0
 
         # -------------------------------------------------------------
-        # Level 2 Queue Q_{j,r}^2 (Time slice \tau_2^{ves})
-        # Task is paused and transferred to Q^2 (to_{j,r}^2 = top1 + exec1)
+        # Level 1 Queue Q1 (Time slice \tau_1^{ves} = 0.1 s)
         # -------------------------------------------------------------
-        to2 = top1 + exec1  # to_{j,r}^2(T_{i,k}^t)
-        w2 = max(0.005, self.q2.total_bytes() / (f_c / 8e6 + 1e-5))
-        top2 = to2 + w2      # top_{j,r}^2(T_{i,k}^t)
-        exec2 = min(rem1, self.time_slices[1])
-        rem2 = max(0.0, rem1 - exec2)
+        head_q1 = self.q1.popleft()
+        service_start_q1 = max(head_q1.queue_entry_time, self.avail_q1)
+        w1 = service_start_q1 - head_q1.queue_entry_time
+        head_q1.accumulated_waiting_time += w1
 
-        if rem2 <= 1e-6:
-            # Task completed in Q^2 (SC^{t,2} = 0)
-            d_bs = exec1 + exec2
-            w_bs = (top1 - entry_time) + (top2 - to2)
-            completion_delay = entry_time + w_bs + d_bs
-            return d_bs, w_bs, completion_delay
+        d_c1 = head_q1.remaining_cpu_cycles / fc_rate
+        d_g1 = (head_q1.remaining_gpu_cycles / fg_rate) if task.R > 0 else 0.0
+        d1 = max(d_c1, d_g1)
+
+        exec1 = min(d1, self.time_slices[0])
+        head_q1.service_time += exec1
+
+        # Work progress update during Q1 interval
+        cpu_consumed1 = min(head_q1.remaining_cpu_cycles, fc_rate * exec1)
+        gpu_consumed1 = min(head_q1.remaining_gpu_cycles, fg_rate * exec1) if task.R > 0 else 0.0
+        head_q1.remaining_cpu_cycles = max(0.0, head_q1.remaining_cpu_cycles - cpu_consumed1)
+        head_q1.remaining_gpu_cycles = max(0.0, head_q1.remaining_gpu_cycles - gpu_consumed1)
+
+        self.avail_q1 = service_start_q1 + exec1
+
+        if head_q1.remaining_cpu_cycles <= 1e-5 and head_q1.remaining_gpu_cycles <= 1e-5:
+            # Completed in Q1
+            head_q1.completion_time = service_start_q1 + exec1
+            return head_q1.service_time, head_q1.accumulated_waiting_time, head_q1.completion_time
 
         # -------------------------------------------------------------
-        # Level 3 Queue Q_{j,r}^3 (Time slice \tau_3^{ves} - Complex queue, no further rotation)
+        # Migrate Q1 -> Q2 (Time slice \tau_2^{ves} = 0.3 s)
         # -------------------------------------------------------------
-        to3 = top2 + exec2  # to_{j,r}^3(T_{i,k}^t)
-        w3 = max(0.005, self.q3.total_bytes() / (f_c / 8e6 + 1e-5))
-        top3 = to3 + w3      # top_{j,r}^3(T_{i,k}^t)
-        exec3 = rem2
+        head_q1.queue_level = 2
+        head_q1.queue_entry_time = service_start_q1 + exec1
+        self.q2.append(head_q1)
 
-        d_bs = exec1 + exec2 + exec3
-        w_bs = (top1 - entry_time) + (top2 - to2) + (top3 - to3)
-        completion_delay = entry_time + w_bs + d_bs
-        return d_bs, w_bs, completion_delay
+        head_q2 = self.q2.popleft()
+        service_start_q2 = max(head_q2.queue_entry_time, self.avail_q2)
+        w2 = service_start_q2 - head_q2.queue_entry_time
+        head_q2.accumulated_waiting_time += w2
+
+        d_c2 = head_q2.remaining_cpu_cycles / fc_rate
+        d_g2 = (head_q2.remaining_gpu_cycles / fg_rate) if task.R > 0 else 0.0
+        d2 = max(d_c2, d_g2)
+
+        exec2 = min(d2, self.time_slices[1])
+        head_q2.service_time += exec2
+
+        # Work progress update during Q2 interval
+        cpu_consumed2 = min(head_q2.remaining_cpu_cycles, fc_rate * exec2)
+        gpu_consumed2 = min(head_q2.remaining_gpu_cycles, fg_rate * exec2) if task.R > 0 else 0.0
+        head_q2.remaining_cpu_cycles = max(0.0, head_q2.remaining_cpu_cycles - cpu_consumed2)
+        head_q2.remaining_gpu_cycles = max(0.0, head_q2.remaining_gpu_cycles - gpu_consumed2)
+
+        self.avail_q2 = service_start_q2 + exec2
+
+        if head_q2.remaining_cpu_cycles <= 1e-5 and head_q2.remaining_gpu_cycles <= 1e-5:
+            # Completed in Q2
+            head_q2.completion_time = service_start_q2 + exec2
+            return head_q2.service_time, head_q2.accumulated_waiting_time, head_q2.completion_time
+
+        # -------------------------------------------------------------
+        # Migrate Q2 -> Q3 (Complex queue - process remaining work to completion)
+        # -------------------------------------------------------------
+        head_q2.queue_level = 3
+        head_q2.queue_entry_time = service_start_q2 + exec2
+        self.q3.append(head_q2)
+
+        head_q3 = self.q3.popleft()
+        service_start_q3 = max(head_q3.queue_entry_time, self.avail_q3)
+        w3 = service_start_q3 - head_q3.queue_entry_time
+        head_q3.accumulated_waiting_time += w3
+
+        d_c3 = head_q3.remaining_cpu_cycles / fc_rate
+        d_g3 = (head_q3.remaining_gpu_cycles / fg_rate) if task.R > 0 else 0.0
+        exec3 = max(d_c3, d_g3)
+        head_q3.service_time += exec3
+
+        head_q3.remaining_cpu_cycles = 0.0
+        head_q3.remaining_gpu_cycles = 0.0
+
+        self.avail_q3 = service_start_q3 + exec3
+        head_q3.completion_time = service_start_q3 + exec3
+
+        return head_q3.service_time, head_q3.accumulated_waiting_time, head_q3.completion_time
 
 
 class MHFQ:
@@ -127,11 +180,6 @@ class MHFQ:
             j: {r: MHFQProcessor(j, r) for r in range(num_gpu_types + 1)}
             for j in range(num_mes)
         }
-
-    def enqueue(self, mes_idx, task):
-        r = min(int(task.R), self.num_gpu_types)
-        proc = self.processors[mes_idx][r]
-        proc.q1.enqueue_task(task, entry_time=0.0)
 
     def get_queue_length(self, mes_idx, gpu_type=0):
         r = int(gpu_type) if isinstance(gpu_type, (int, float, np.integer)) else 0
@@ -149,14 +197,12 @@ class MHFQ:
 class FCFSQueue:
     """
     First-Come First-Served Queuing Framework for MES nodes (Paper Section VI-A.2).
-    Processes tasks sequentially without multi-level feedback or parallel queue slicing.
+    Processes tasks sequentially in arrival order using explicit FIFO queue.
     """
     def __init__(self, num_mes=EnvConfig.NUM_MES):
         self.num_mes = num_mes
-        self.queues = {i: [] for i in range(num_mes)}
-
-    def enqueue(self, mes_idx, task):
-        self.queues[mes_idx].append(task)
+        self.queues = {i: deque() for i in range(num_mes)}
+        self.avail_time = {i: 0.0 for i in range(num_mes)}
 
     def get_queue_length(self, mes_idx, gpu_type=None):
         return sum(t.size for t in self.queues[mes_idx])
@@ -164,41 +210,56 @@ class FCFSQueue:
     def process_offloaded_task(self, mes_idx, task, entry_time,
                                f_c=EnvConfig.MES_TOTAL_CPU_CAPACITY/3.0,
                                f_g=EnvConfig.MES_GPU_CAPACITY):
-        q_size = self.get_queue_length(mes_idx)
-        w_bs = max(0.01, q_size / (f_c / 8e6 + 1e-5))
-        c_time = (task.C * 1e6) / max(1e6, f_c)
-        g_time = (task.G * 1e6) / max(1e6, f_g) if task.R > 0 else 0.0
+        self.queues[mes_idx].append(task)
+        head_task = self.queues[mes_idx].popleft()
+
+        to = float(entry_time)
+        top = max(to, self.avail_time[mes_idx])
+        w_bs = top - to
+        
+        c_time = (head_task.C * 1e6) / max(1e6, float(f_c))
+        g_time = ((head_task.G * 1e6) / max(1e6, float(f_g))) if head_task.R > 0 else 0.0
         d_bs = max(c_time, g_time)
-        completion_delay = entry_time + w_bs + d_bs
+        
+        completion_delay = top + d_bs
+        self.avail_time[mes_idx] = completion_delay
         return d_bs, w_bs, completion_delay
 
 
 class MMCQueue:
     """
-    M/M/C Queuing Framework dividing MES resources into C parallel sub-queues (Paper Section VI-A.2).
+    M/M/C Queuing Framework dividing MES resources into C parallel service channels (Paper Section VI-A.2).
+    Maintains explicit FIFO queues per channel.
     """
     def __init__(self, num_mes=EnvConfig.NUM_MES, c_channels=4):
         self.num_mes = num_mes
         self.c_channels = c_channels
-        self.queues = {i: [[] for _ in range(c_channels)] for i in range(num_mes)}
-
-    def enqueue(self, mes_idx, task):
-        lengths = [sum(t.size for t in q) for q in self.queues[mes_idx]]
-        shortest_idx = int(np.argmin(lengths))
-        self.queues[mes_idx][shortest_idx].append(task)
+        self.channel_queues = {i: [deque() for _ in range(c_channels)] for i in range(num_mes)}
+        self.channel_avail = {i: [0.0] * c_channels for i in range(num_mes)}
 
     def get_queue_length(self, mes_idx, gpu_type=None):
-        return sum(sum(t.size for t in q) for q in self.queues[mes_idx])
+        return sum(sum(t.size for t in q) for q in self.channel_queues[mes_idx])
 
     def process_offloaded_task(self, mes_idx, task, entry_time,
                                f_c=EnvConfig.MES_TOTAL_CPU_CAPACITY/3.0,
                                f_g=EnvConfig.MES_GPU_CAPACITY):
-        q_size = self.get_queue_length(mes_idx) / self.c_channels
-        w_bs = max(0.008, q_size / (f_c / 8e6 + 1e-5))
-        c_time = (task.C * 1e6) / max(1e6, f_c)
-        g_time = (task.G * 1e6) / max(1e6, f_g) if task.R > 0 else 0.0
+        # Assign to channel with earliest availability time / shortest queue
+        chans = self.channel_avail[mes_idx]
+        best_chan = int(np.argmin(chans))
+        
+        self.channel_queues[mes_idx][best_chan].append(task)
+        head_task = self.channel_queues[mes_idx][best_chan].popleft()
+        
+        to = float(entry_time)
+        top = max(to, self.channel_avail[mes_idx][best_chan])
+        w_bs = top - to
+        
+        c_time = (head_task.C * 1e6) / max(1e6, float(f_c))
+        g_time = ((head_task.G * 1e6) / max(1e6, float(f_g))) if head_task.R > 0 else 0.0
         d_bs = max(c_time, g_time)
-        completion_delay = entry_time + w_bs + d_bs
+        
+        completion_delay = top + d_bs
+        self.channel_avail[mes_idx][best_chan] = completion_delay
         return d_bs, w_bs, completion_delay
 
 
@@ -212,7 +273,6 @@ class LRMARewardCalculator:
 
     def calculate_drift(self, q_before, q_after):
         r"""Calculates Lyapunov drift \Delta L(Z_t) (Paper Eq 21)."""
-        # Paper Eq. (21): \Delta L(Z_t) = 0.5 * (\sum q_{after}^2 - \sum q_{before}^2)
         drift = 0.5 * (np.sum(np.square(q_after)) - np.sum(np.square(q_before)))
         return drift
 

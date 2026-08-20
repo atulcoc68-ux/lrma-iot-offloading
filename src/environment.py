@@ -37,11 +37,12 @@ class LRMA_Environment:
         self.reward_calc = LRMARewardCalculator(V_penalty=V_val if V_val is not None else config.V)
 
         # Dynamic System Queues (Paper Eq. 1 - 4)
-        # Q_device_i(t) for each ED i (Paper Eq. 1-2)
         self.q_device = np.zeros(self.num_ed, dtype=np.float64)
-        # Q_es_j(t) for each MES j (Paper Eq. 3-4)
         self.q_es = np.zeros(self.num_mes, dtype=np.float64)
         
+        # Local ED availability timelines (Paper Eq. 11-13)
+        self.ed_avail_time = np.zeros(self.num_ed, dtype=np.float64)
+
         # Static BS and ED positions
         np.random.seed(42)
         self.ed_positions = np.random.uniform(0, 500, size=(self.num_ed, 2))
@@ -114,24 +115,32 @@ class LRMA_Environment:
         cloud_action y_{i,k}^t \in {0...M-1}: MES node assignment.
         """
         x_offload = 1 if ed_action > 0 else 0
+        t_arrival = float(self.current_time_slot)
         
         if x_offload == 0:
             # Paper Eq. (11)-(13): Local execution on ED i
-            c_time = (task.C * 1e6) / self.config.LOCAL_CPU_CAPACITY
-            g_time = (task.G * 1e6) / self.config.LOCAL_GPU_CAPACITY if task.R > 0 else 0.0
+            c_time = (task.C * 1e6) / float(self.config.LOCAL_CPU_CAPACITY)
+            g_time = ((task.G * 1e6) / float(self.config.LOCAL_GPU_CAPACITY)) if task.R > 0 else 0.0
             d_ed = max(c_time, g_time)
-            w_ed = float(self.q_device[ed_idx]) / (self.config.LOCAL_CPU_CAPACITY / 8e6 + 1e-5)
+            
+            top_local = max(t_arrival, float(self.ed_avail_time[ed_idx]))
+            w_ed = top_local - t_arrival
+            completion_time = top_local + d_ed
+            self.ed_avail_time[ed_idx] = completion_time
             
             total_delay = d_ed + w_ed
-            energy = 0.5 * (task.size / 8e6)  # Local energy consumption
+            energy = 0.5 * (task.size / 8e6)  # Energy consumption
             
-            # Update local queue (Paper Eq. 1-2)
-            self.q_device[ed_idx] = max(0.0, self.q_device[ed_idx] + task.size - self.config.LOCAL_CPU_CAPACITY * self.config.TAU / 10.0)
+            # Update local queue backlog (Paper Eq. 1-2)
+            self.q_device[ed_idx] += task.size
             
             return {
                 'is_offloaded': False,
                 'mes_assigned': -1,
                 'delay': total_delay,
+                'processing_delay': d_ed,
+                'waiting_time': w_ed,
+                'completion_time': completion_time,
                 'energy': energy,
                 'task_size': task.size
             }
@@ -153,19 +162,22 @@ class LRMA_Environment:
             total_delay = t_trans + w_bs + d_bs
             energy = 0.2 * (task.size / 8e6)  # Transmission energy consumption
 
-            # Update MES queue (Paper Eq. 3-4)
-            self.q_es[mes_idx] = max(0.0, self.q_es[mes_idx] + task.size - self.config.MES_TOTAL_CPU_CAPACITY * self.config.TAU / 10.0)
+            # Update MES queue backlog (Paper Eq. 3-4)
+            self.q_es[mes_idx] += task.size
 
             return {
                 'is_offloaded': True,
                 'mes_assigned': mes_idx,
                 'delay': total_delay,
+                'processing_delay': d_bs,
+                'waiting_time': w_bs + t_trans,
+                'completion_time': completion_time,
                 'energy': energy,
                 'task_size': task.size
             }
 
     def update_time_slot(self, slot_idx, slot_tasks):
-        """Advance simulation time slot t (Paper Eq. 1-4)."""
+        """Advance simulation time slot t and update queue backlogs (Paper Eq. 1-4)."""
         self.current_time_slot = slot_idx
         
         # Flatten tasks if passed as per-ED dict: {ed_id: [tasks]}
@@ -187,8 +199,11 @@ class LRMA_Environment:
 
         self.history_arrival_states.append(state_vec)
 
-        # Decay queues per slot duration \tau = 1s (Paper Eq. 1-4)
+        # Decay queues per slot duration \tau = 1s based on processed capacity (Paper Eq. 1-4)
+        processed_cap_ed = (self.config.LOCAL_CPU_CAPACITY * self.config.TAU) / float(self.config.RHO)
+        processed_cap_mes = (self.config.MES_TOTAL_CPU_CAPACITY * self.config.TAU) / float(self.config.RHO)
+
         for i in range(self.num_ed):
-            self.q_device[i] = max(0.0, self.q_device[i] - self.config.LOCAL_CPU_CAPACITY * self.config.TAU / 10.0)
+            self.q_device[i] = max(0.0, self.q_device[i] - processed_cap_ed)
         for j in range(self.num_mes):
-            self.q_es[j] = max(0.0, self.q_es[j] - self.config.MES_TOTAL_CPU_CAPACITY * self.config.TAU / 10.0)
+            self.q_es[j] = max(0.0, self.q_es[j] - processed_cap_mes)
