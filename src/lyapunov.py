@@ -19,6 +19,7 @@ class QueuedTaskState:
             self.ed_id = int(ed_id)
         else:
             self.ed_id = int(getattr(task, 'ed_id', 0))
+        self.arrival_slot = float(getattr(task, 'arrival_slot', entry_time))
         self.entry_time = float(entry_time)          # Initial arrival time at MES (to_{j,r}^1)
         self.queue_entry_time = float(entry_time)    # Entry time into current level queue
         self.queue_level = 1                         # 1, 2, or 3
@@ -29,6 +30,7 @@ class QueuedTaskState:
         self.accumulated_waiting_time = 0.0
         self.service_time = 0.0
         self.completion_time = 0.0
+        self.completion_delay = 0.0
 
     def __repr__(self):
         return (f"QueuedTask(ID={self.task_id}, ED={self.ed_id}, L={self.queue_level}, "
@@ -51,7 +53,7 @@ class MHFQProcessor:
         self.q2 = deque()
         self.q3 = deque()
         
-        # Auxiliary availability timelines for queue servers
+        # Auxiliary availability timelines for queue servers (Absolute simulation timestamps)
         self.avail_q1 = 0.0
         self.avail_q2 = 0.0
         self.avail_q3 = 0.0
@@ -72,7 +74,8 @@ class MHFQProcessor:
         - GPU processing delay D_{i,k,j}^{g,t} (Paper Eq. 15)
         - Combined processing delay D_{i,k,j}^{BS,t} = max(D^c, D^g) (Paper Eq. 16)
         - Queue waiting time W_{i,k,j}^{BS,t} (Paper Eq. 17)
-        - Completion delay \aleph_{i,k}^{BS,t} (Paper Eq. 18)
+        - Absolute completion time \aleph_{i,k}^{BS,t} (Paper Eq. 18)
+        - Elapsed completion delay Time_{i,k}^t = \aleph - t (Paper Sec III-C.2)
         """
         # 1. Instantiate Task State & Enqueue into Q1
         task_state = QueuedTaskState(task, entry_time)
@@ -107,7 +110,8 @@ class MHFQProcessor:
         if head_q1.remaining_cpu_cycles <= 1e-5 and head_q1.remaining_gpu_cycles <= 1e-5:
             # Completed in Q1
             head_q1.completion_time = service_start_q1 + exec1
-            return head_q1.service_time, head_q1.accumulated_waiting_time, head_q1.completion_time
+            head_q1.completion_delay = head_q1.completion_time - head_q1.arrival_slot
+            return head_q1.service_time, head_q1.accumulated_waiting_time, head_q1.completion_time, head_q1.completion_delay
 
         # -------------------------------------------------------------
         # Migrate Q1 -> Q2 (Time slice \tau_2^{ves} = 0.3 s)
@@ -139,7 +143,8 @@ class MHFQProcessor:
         if head_q2.remaining_cpu_cycles <= 1e-5 and head_q2.remaining_gpu_cycles <= 1e-5:
             # Completed in Q2
             head_q2.completion_time = service_start_q2 + exec2
-            return head_q2.service_time, head_q2.accumulated_waiting_time, head_q2.completion_time
+            head_q2.completion_delay = head_q2.completion_time - head_q2.arrival_slot
+            return head_q2.service_time, head_q2.accumulated_waiting_time, head_q2.completion_time, head_q2.completion_delay
 
         # -------------------------------------------------------------
         # Migrate Q2 -> Q3 (Complex queue - process remaining work to completion)
@@ -163,8 +168,9 @@ class MHFQProcessor:
 
         self.avail_q3 = service_start_q3 + exec3
         head_q3.completion_time = service_start_q3 + exec3
+        head_q3.completion_delay = head_q3.completion_time - head_q3.arrival_slot
 
-        return head_q3.service_time, head_q3.accumulated_waiting_time, head_q3.completion_time
+        return head_q3.service_time, head_q3.accumulated_waiting_time, head_q3.completion_time, head_q3.completion_delay
 
 
 class MHFQ:
@@ -221,9 +227,12 @@ class FCFSQueue:
         g_time = ((head_task.G * 1e6) / max(1e6, float(f_g))) if head_task.R > 0 else 0.0
         d_bs = max(c_time, g_time)
         
-        completion_delay = top + d_bs
-        self.avail_time[mes_idx] = completion_delay
-        return d_bs, w_bs, completion_delay
+        completion_time = top + d_bs
+        self.avail_time[mes_idx] = completion_time
+        
+        t_arrival = float(getattr(head_task, 'arrival_slot', to))
+        completion_delay = completion_time - t_arrival
+        return d_bs, w_bs, completion_time, completion_delay
 
 
 class MMCQueue:
@@ -258,9 +267,12 @@ class MMCQueue:
         g_time = ((head_task.G * 1e6) / max(1e6, float(f_g))) if head_task.R > 0 else 0.0
         d_bs = max(c_time, g_time)
         
-        completion_delay = top + d_bs
-        self.channel_avail[mes_idx][best_chan] = completion_delay
-        return d_bs, w_bs, completion_delay
+        completion_time = top + d_bs
+        self.channel_avail[mes_idx][best_chan] = completion_time
+        
+        t_arrival = float(getattr(head_task, 'arrival_slot', to))
+        completion_delay = completion_time - t_arrival
+        return d_bs, w_bs, completion_time, completion_delay
 
 
 class LRMARewardCalculator:

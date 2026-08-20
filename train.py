@@ -83,6 +83,8 @@ def train_lrma_agent(seed=42, num_ed=EnvConfig.NUM_ED, V_val=EnvConfig.V,
 
     slot_rewards = []
     task_delays = []
+    task_processing_delays = []
+    task_waiting_times = []
     offload_decisions = []
     ed_queue_history = []
     mes_queue_history = []
@@ -132,6 +134,10 @@ def train_lrma_agent(seed=42, num_ed=EnvConfig.NUM_ED, V_val=EnvConfig.V,
 
                 slot_reward_sum += r_tot
                 task_delays.append(res['delay'])
+                if 'processing_delay' in res:
+                    task_processing_delays.append(res['processing_delay'])
+                if 'waiting_time' in res:
+                    task_waiting_times.append(res['waiting_time'])
                 offload_decisions.append(1 if res['is_offloaded'] else 0)
 
                 # Store experience in buffer (Algorithm 1, line 22)
@@ -162,6 +168,27 @@ def train_lrma_agent(seed=42, num_ed=EnvConfig.NUM_ED, V_val=EnvConfig.V,
     elapsed = time.time() - start_time
     print(f"LRMA Training Complete in {elapsed:.2f} seconds.")
 
+    total_gen = len(task_delays)
+    completed_count = sum(1 for d in task_delays if d < total_slots)
+    pending_count = total_gen - completed_count
+    mean_comp_delay = float(np.mean(task_delays)) if task_delays else 0.0
+    max_comp_delay = float(np.max(task_delays)) if task_delays else 0.0
+    mean_proc_delay = float(np.mean(task_processing_delays)) if task_processing_delays else 0.0
+    mean_wait_time = float(np.mean(task_waiting_times)) if task_waiting_times else 0.0
+    mean_backlog = float(np.mean(ed_queue_history) + np.mean(mes_queue_history)) / 8e6
+
+    print("\n================ Delay Accounting Audit Sanity Summary ================")
+    print(f"Generated Tasks:       {total_gen}")
+    print(f"Completed Tasks:       {completed_count}")
+    print(f"Pending Tasks:         {pending_count}")
+    print(f"Mean Completion Delay: {mean_comp_delay:.4f} s")
+    print(f"Max Completion Delay:  {max_comp_delay:.4f} s")
+    print(f"Mean Processing Time:  {mean_proc_delay:.4f} s")
+    print(f"Mean Waiting Time:     {mean_wait_time:.4f} s")
+    print(f"Mean Queue Backlog:    {mean_backlog:.4f} MB")
+    print(f"Offloading Ratio:      {np.mean(offload_decisions):.4f}")
+    print("=======================================================================\n")
+
     # Save Checkpoint Models
     chkpt_path = os.path.join(EnvConfig.CHECKPOINTS_DIR, f"lrma_actor_N{num_ed}_V{int(V_val)}_reset{reset_enabled}.pth")
     torch.save(ed_primary_actors[0].state_dict(), chkpt_path)
@@ -172,8 +199,15 @@ def train_lrma_agent(seed=42, num_ed=EnvConfig.NUM_ED, V_val=EnvConfig.V,
         'V': V_val,
         'reset_enabled': reset_enabled,
         'task_arrival_rate': task_arrival_rate,
+        'generated_tasks': total_gen,
+        'completed_tasks': completed_count,
+        'pending_tasks': pending_count,
         'all_task_delay': float(np.sum(task_delays)),
-        'avg_task_delay': float(np.mean(task_delays)),
+        'avg_task_delay': mean_comp_delay,
+        'max_task_delay': max_comp_delay,
+        'avg_processing_time': mean_proc_delay,
+        'avg_waiting_time': mean_wait_time,
+        'mean_queue_backlog_mb': mean_backlog,
         'offloading_ratio': float(np.mean(offload_decisions)),
         'ed_queue_history': ed_queue_history,
         'mes_queue_history': mes_queue_history,

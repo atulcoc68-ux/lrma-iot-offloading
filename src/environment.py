@@ -126,9 +126,9 @@ class LRMA_Environment:
             top_local = max(t_arrival, float(self.ed_avail_time[ed_idx]))
             w_ed = top_local - t_arrival
             completion_time = top_local + d_ed
-            self.ed_avail_time[ed_idx] = completion_time
+            completion_delay = completion_time - t_arrival
             
-            total_delay = d_ed + w_ed
+            self.ed_avail_time[ed_idx] = completion_time
             energy = 0.5 * (task.size / 8e6)  # Energy consumption
             
             # Update local queue backlog (Paper Eq. 1-2)
@@ -137,10 +137,13 @@ class LRMA_Environment:
             return {
                 'is_offloaded': False,
                 'mes_assigned': -1,
-                'delay': total_delay,
-                'processing_delay': d_ed,
+                'arrival_time': t_arrival,
+                'transmission_delay': 0.0,
                 'waiting_time': w_ed,
+                'processing_delay': d_ed,
                 'completion_time': completion_time,
+                'completion_delay': completion_delay,
+                'delay': completion_delay,
                 'energy': energy,
                 'task_size': task.size
             }
@@ -157,9 +160,7 @@ class LRMA_Environment:
             to_entry = self.wireless.calculate_offload_completion_entry_time(self.current_time_slot, t_trans)
 
             # MES Queue execution & waiting time (Paper Eq. 14-18)
-            d_bs, w_bs, completion_time = self.mhfq.process_offloaded_task(mes_idx, task, to_entry)
-            
-            total_delay = t_trans + w_bs + d_bs
+            d_bs, w_bs, completion_time, completion_delay = self.mhfq.process_offloaded_task(mes_idx, task, to_entry)
             energy = 0.2 * (task.size / 8e6)  # Transmission energy consumption
 
             # Update MES queue backlog (Paper Eq. 3-4)
@@ -168,10 +169,13 @@ class LRMA_Environment:
             return {
                 'is_offloaded': True,
                 'mes_assigned': mes_idx,
-                'delay': total_delay,
+                'arrival_time': t_arrival,
+                'transmission_delay': t_trans,
+                'waiting_time': w_bs,
                 'processing_delay': d_bs,
-                'waiting_time': w_bs + t_trans,
                 'completion_time': completion_time,
+                'completion_delay': completion_delay,
+                'delay': completion_delay,
                 'energy': energy,
                 'task_size': task.size
             }
