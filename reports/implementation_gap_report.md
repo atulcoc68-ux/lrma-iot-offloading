@@ -17,9 +17,9 @@ The objective is to establish complete technical transparency, document all impl
 ## 2. Comprehensive Implementation vs. Paper Mapping
 
 ### 2.1 System Architecture & Problem Setup
-- **Paper Requirement**: Dynamic IoT system with $|N| \in \{20, 25, 30\}$ End Devices (EDs), $M=5$ Mobile Edge Servers (MESs), $|R|=3$ GPU resource types ($R=\{0, 1, 2, 3\}$), slot duration $\tau=1.0$ s, simulation duration $K=300$ s. Max task generation $Max_n=5$ per ED per slot. Max task size $\omega=10^8$ bits (100 MB).
-- **Code Implementation**: Fully configured in `src/config.py` (`NUM_ED=25`, `NUM_MES=5`, `NUM_GPU_TYPES=3`, `TAU=1.0`, `TOTAL_SLOTS=300`, `MAX_N=5`, `OMEGA=1e8`).
-- **Fidelity Status**: **100% MATCH**.
+- **Paper Requirement**: Dynamic IoT system with $|N| \in \{20, 25, 30\}$ End Devices (EDs), $M=5$ Mobile Edge Servers (MESs), $|R|=3$ GPU resource types ($R=\{0, 1, 2, 3\}$), slot duration $\tau=1.0$ s, simulation duration $K=300$ s. Max task generation $Max_n=5$ per ED per slot ($|m_i^t| \le Max_n$). Max task size $\omega=10^8$ bits (100 MB).
+- **Code Implementation**: Configured in `src/config.py` (`NUM_ED=25`, `NUM_MES=5`, `NUM_GPU_TYPES=3`, `TAU=1.0`, `TOTAL_SLOTS=300`, `MAX_N=5`, `OMEGA=1e8`). Workload loader implements per-ED Binomial arrivals $|m_i^t| \sim \text{Binomial}(Max_n=5, p)$ returning structured per-ED workloads (`workload_by_slot[t][ed_id]`), generating ~75 tasks/slot at $p=0.60$ ($N=25$). Note: Per-ED Binomial process is an explicit modeling assumption (Paper Eq. 19g).
+- **Fidelity Status**: **MATCH (Implementation Assumption Explicitly Documented)**.
 
 ---
 
@@ -47,8 +47,8 @@ The objective is to establish complete technical transparency, document all impl
   - Time slices $\tau_1^{ves} = 0.1$ s, $\tau_2^{ves} = 0.3$ s, $\tau_3^{ves} = 0.6$ s.
   - Task execution & migration: Enters $Q^1$, processed up to $\tau_1^{ves}$. If uncompleted, moves to $Q^2$, processed up to $\tau_2^{ves}$. If still uncompleted, moves to $Q^3$ without further rotation.
   - CPU delay $D_{i,k,j}^{c,t}$ (Eq. 14), GPU delay $D_{i,k,j}^{g,t}$ (Eq. 15), combined delay $D_{i,k,j}^{BS,t} = \max(D^c, D^g)$ (Eq. 16), waiting time $W_{i,k,j}^{BS,t}$ (Eq. 17), and completion delay $\aleph_{i,k}^{BS,t}$ (Eq. 18).
-- **Code Implementation**: `MHFQProcessor` and `MHFQ` in `src/lyapunov.py` simulate explicit 3-level queues ($Q^1, Q^2, Q^3$) with time slicing, preemption, and rotation, computing exact execution delays $D^{BS,t}$, waiting times $W^{BS,t}$, and completion times.
-- **Fidelity Status**: **MATCH**.
+- **Code Implementation**: `MHFQProcessor` and `MHFQ` in `src/lyapunov.py` simulate stateful 3-level queues ($Q^1, Q^2, Q^3$) with time slicing, preemption, and rotation, computing exact execution delays $D^{BS,t}$, waiting times $W^{BS,t}$, and completion times. FCFS and M/M/C implemented as stateful comparative baseline queues.
+- **Fidelity Status**: **100% MATCH**.
 
 ---
 

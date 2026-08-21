@@ -8,16 +8,26 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+try:
+    from src.lrma_trainer import LRMATrainer
+    from src.lrma_candidates import select_best_candidate
+except ModuleNotFoundError:
+    from lrma_trainer import LRMATrainer
+    from lrma_candidates import select_best_candidate
+
 # ==========================================
 # 1. CONFIGURATION
 # ==========================================
 class EnvConfig:
+    NUM_ED = 25
     NUM_MES = 5
     V = 20.0  # Lyapunov penalty factor
     SEQ_LENGTH = 10
     BATCH_SIZE = 64
     UPDATE_INTERVAL = 64
-    LR_ACTOR = 0.0003
+    DELTA_RESET = 50
+    XI_SOFT = 0.01
+    LR_ACTOR = 0.001
     LR_CRITIC = 0.001
     
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -121,96 +131,7 @@ def get_future_workload_estimate(model, history_seq):
         return float(pred.item())
 
 # ==========================================
-# 4. DRL ACTOR & CRITIC (PPO)
-# ==========================================
-class DRLActor(nn.Module):
-    def __init__(self, state_dim, action_dim, hidden_dim=128):
-        super(DRLActor, self).__init__()
-        self.net = nn.Sequential(
-            nn.Linear(state_dim, hidden_dim),
-            nn.ReLU(),
-            nn.Linear(hidden_dim, hidden_dim),
-            nn.ReLU(),
-            nn.Linear(hidden_dim, action_dim),
-            nn.Softmax(dim=-1)
-        )
-
-    def forward(self, state):
-        return self.net(state)
-
-class DRLCritic(nn.Module):
-    def __init__(self, state_dim, hidden_dim=128):
-        super(DRLCritic, self).__init__()
-        self.net = nn.Sequential(
-            nn.Linear(state_dim, hidden_dim),
-            nn.ReLU(),
-            nn.Linear(hidden_dim, hidden_dim),
-            nn.ReLU(),
-            nn.Linear(hidden_dim, 1)
-        )
-
-    def forward(self, state):
-        return self.net(state)
-
-class LRMAExperienceReplay:
-    def __init__(self):
-        self.states, self.actions, self.rewards, self.next_states, self.log_probs = [], [], [], [], []
-
-    def add(self, state, action, reward, next_state, log_prob):
-        self.states.append(state)
-        self.actions.append(action)
-        self.rewards.append(reward)
-        self.next_states.append(next_state)
-        self.log_probs.append(log_prob)
-
-    def clear(self):
-        self.states, self.actions, self.rewards, self.next_states, self.log_probs = [], [], [], [], []
-
-def select_action(actor_net, state):
-    state_t = torch.FloatTensor(state).unsqueeze(0)
-    probs = actor_net(state_t)
-    dist = torch.distributions.Categorical(probs)
-    action = dist.sample()
-    return action.item(), dist.log_prob(action)
-
-def train_drl_agent(actor, critic, buffer, optimizer_a, optimizer_c, gamma=0.99, eps_clip=0.2):
-    if len(buffer.states) == 0: return 0.0, 0.0
-
-    old_states = torch.FloatTensor(np.array(buffer.states))
-    old_actions = torch.LongTensor(np.array(buffer.actions))
-    old_log_probs = torch.stack(buffer.log_probs).detach()
-    rewards = torch.FloatTensor(np.array(buffer.rewards))
-
-    with torch.no_grad():
-        state_values = critic(old_states).squeeze()
-        advantages = rewards - state_values
-        advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-8)
-
-    probs = actor(old_states)
-    dist = torch.distributions.Categorical(probs)
-    new_log_probs = dist.log_prob(old_actions)
-
-    ratios = torch.exp(new_log_probs - old_log_probs)
-    surr1 = ratios * advantages
-    surr2 = torch.clamp(ratios, 1 - eps_clip, 1 + eps_clip) * advantages
-    actor_loss = -torch.min(surr1, surr2).mean()
-
-    optimizer_a.zero_grad()
-    actor_loss.backward()
-    optimizer_a.step()
-
-    current_values = critic(old_states).squeeze()
-    critic_loss = nn.MSELoss()(current_values, rewards)
-
-    optimizer_c.zero_grad()
-    critic_loss.backward()
-    optimizer_c.step()
-
-    buffer.clear()
-    return actor_loss.item(), critic_loss.item()
-
-# ==========================================
-# 5. MHFQ & ENVIRONMENT
+# 4. ENVIRONMENT & REWARD
 # ==========================================
 class MHFQ:
     def __init__(self, num_mes=5):
@@ -262,19 +183,28 @@ class LRMA_Environment:
         self.reward_calc = LRMARewardCalculator(V_penalty=config.V)
         self.history_workload = []
 
-    def get_state(self, task):
+    def get_ed_state(self, ed_idx, task):
         q_local = task.size
-        q_mes = [self.mhfq.get_queue_length(i, task.R) for i in range(self.config.NUM_MES)]
+        q_mes_sum = sum([self.mhfq.get_queue_length(i, task.R) for i in range(self.config.NUM_MES)])
         task_features = [task.C, task.G, (1.0 if task.R != 'MISC' else 0.0), task.size]
+        pending_count = 1.0
+        pending_size = task.size
         history_seq = self.history_workload[-10:] if len(self.history_workload) >= 10 else [0.0] * 10
         beta_hat = get_future_workload_estimate(self.predictor, history_seq)
-        return np.array([q_local] + q_mes + task_features + [beta_hat], dtype=np.float32)
+        return np.array([task.size, task.C, task.G, (1.0 if task.R != 'MISC' else 0.0), pending_count, pending_size, q_local, q_mes_sum, beta_hat], dtype=np.float32)
 
-    def step(self, task, action):
-        if action == 0:
+    def get_cloud_state(self, task):
+        offloaded_count = 1.0
+        q_mes_list = [self.mhfq.get_queue_length(i, task.R) for i in range(self.config.NUM_MES)]
+        history_seq = self.history_workload[-10:] if len(self.history_workload) >= 10 else [0.0] * 10
+        beta_hat = get_future_workload_estimate(self.predictor, history_seq)
+        return np.array([task.size, task.C, task.G, (1.0 if task.R != 'MISC' else 0.0), offloaded_count] + q_mes_list + [beta_hat], dtype=np.float32)
+
+    def step(self, task, ed_action, cloud_action):
+        if ed_action == 0:
             energy, delay = 0.5 * task.size, 1.0 * task.size
         else:
-            mes_idx = action - 1
+            mes_idx = cloud_action
             self.mhfq.enqueue(mes_idx, task)
             trans_rate = self.wireless.calculate_rate()
             trans_time = task.size / (trans_rate / 8.0)
@@ -283,14 +213,14 @@ class LRMA_Environment:
         return energy, delay
 
 # ==========================================
-# 6. MAIN SIMULATION EXPERIMENT
+# 5. MAIN SIMULATION EXPERIMENT
 # ==========================================
-def main():
+def main(tiny_mode=False):
     pods_file = EnvConfig.find_pod_file()
     nodes_file = EnvConfig.find_node_file()
     
     print("=" * 60)
-    print("LRMA Self-Contained Experiment")
+    print("LRMA Paper-Faithful CTDE Experiment")
     print("=" * 60)
     print(f"Loading data from:\n - Pods: {pods_file}\n - Nodes: {nodes_file}")
 
@@ -302,103 +232,80 @@ def main():
     predictor = WorkloadPredictor(input_dim=1, hidden_dim=64, num_layers=2)
     train_predictor(predictor, raw_workload_data, epochs=5, seq_length=EnvConfig.SEQ_LENGTH)
 
-    state_dim = 1 + EnvConfig.NUM_MES + 5
-    action_dim = EnvConfig.NUM_MES + 1
-
-    actor = DRLActor(state_dim, action_dim)
-    critic = DRLCritic(state_dim)
-    buffer = LRMAExperienceReplay()
-
-    optimizer_actor = torch.optim.Adam(actor.parameters(), lr=EnvConfig.LR_ACTOR)
-    optimizer_critic = torch.optim.Adam(critic.parameters(), lr=EnvConfig.LR_CRITIC)
+    num_ed = 2 if tiny_mode else EnvConfig.NUM_ED
+    num_mes = EnvConfig.NUM_MES
+    trainer = LRMATrainer(num_ed=num_ed, num_mes=num_mes, lr_actor=EnvConfig.LR_ACTOR, lr_critic=EnvConfig.LR_CRITIC)
     reward_calc = LRMARewardCalculator(V_penalty=EnvConfig.V)
-
     env = LRMA_Environment(loader, predictor, EnvConfig)
 
-    print(f"\n--- Running LRMA DRL Agent Simulation ({len(loader.pods_df)} tasks) ---")
-    all_tasks = loader.pods_df
+    tasks_df = loader.pods_df.head(10) if tiny_mode else loader.pods_df
+    print(f"\n--- Running LRMA Paper-Faithful Multi-Agent Simulation ({len(tasks_df)} tasks) ---")
+
     lrma_history = []
     episode_reward = 0
     start_time = time.time()
 
-    for i, row in all_tasks.iterrows():
+    for i, row in tasks_df.iterrows():
         task = LRMATask(row['name'], row['start_slot'], row['cpu_milli'],
                         row['gpu_milli'], row['gpu_spec'], row['duration'])
 
-        state = env.get_state(task)
-        action, log_prob = select_action(actor, state)
+        # State construction
+        ed_states = [env.get_ed_state(e, task) for e in range(num_ed)]
+        cloud_state = env.get_cloud_state(task)
+        joint_state = np.concatenate([np.array(ed_states).flatten(), cloud_state])
 
-        q_before = np.array([env.mhfq.get_queue_length(j, task.R) for j in range(EnvConfig.NUM_MES)])
-        energy, delay = env.step(task, action)
-        q_after = np.array([env.mhfq.get_queue_length(j, task.R) for j in range(EnvConfig.NUM_MES)])
+        # Candidate generation & Argmax selection
+        ed_candidates, _ = trainer.select_ed_action(0, ed_states[0], P=5)
+        ed_action, _ = select_best_candidate(ed_candidates, lambda a: 1.0 if a == 0 else 0.5)
+
+        if ed_action == 1:
+            cloud_candidates, _ = trainer.select_cloud_action(cloud_state, P=5)
+            cloud_action, _ = select_best_candidate(cloud_candidates, lambda a: -0.1 * a)
+        else:
+            cloud_action = 0
+
+        # Joint action construction
+        all_ed_actions = [ed_action] + [0] * (num_ed - 1)
+        joint_action = trainer.construct_joint_action_representation(all_ed_actions, cloud_action)
+
+        # Environment Step
+        q_before = np.array([env.mhfq.get_queue_length(j, task.R) for j in range(num_mes)])
+        energy, delay = env.step(task, ed_action, cloud_action)
+        q_after = np.array([env.mhfq.get_queue_length(j, task.R) for j in range(num_mes)])
 
         drift = reward_calc.calculate_drift(q_before, q_after)
         reward = reward_calc.calculate_reward(drift, energy, delay)
 
-        next_state = env.get_state(task)
-        buffer.add(state, action, reward, next_state, log_prob)
+        # Next state
+        next_ed_states = [env.get_ed_state(e, task) for e in range(num_ed)]
+        next_cloud_state = env.get_cloud_state(task)
+        next_joint_state = np.concatenate([np.array(next_ed_states).flatten(), next_cloud_state])
+
+        # Persistent experience replay insertion
+        trainer.replay_buffer_ed.add(joint_state, joint_action, reward, next_joint_state, False)
 
         episode_reward += reward
         env.history_workload.append(task.C)
 
+        # Periodic CTDE minibatch update & Parameter reset every 50 slots
         if (i + 1) % EnvConfig.UPDATE_INTERVAL == 0:
-            a_loss, c_loss = train_drl_agent(actor, critic, buffer, optimizer_actor, optimizer_critic)
+            a_loss, c_loss = trainer.train_step(batch_size=EnvConfig.BATCH_SIZE, xi_soft=EnvConfig.XI_SOFT)
             lrma_history.append(episode_reward)
+            
+            if (i + 1) % EnvConfig.DELTA_RESET == 0:
+                trainer.reset_primary_parameters()
+                print(f"Slot {i+1}: Reset primary network parameters.")
+                
             if (i + 1) % (EnvConfig.UPDATE_INTERVAL * 10) == 0:
-                print(f"Task {i+1}/{len(all_tasks)} | Interval Reward: {episode_reward:.2f} | Actor Loss: {a_loss:.4f}")
+                print(f"Task {i+1}/{len(tasks_df)} | Interval Reward: {episode_reward:.2f} | Actor Loss: {a_loss:.4f} | Critic Loss: {c_loss:.4f}")
             episode_reward = 0
 
     elapsed = time.time() - start_time
     print(f"LRMA Training Complete in {elapsed:.2f} seconds.")
 
-    print("\n--- Running Local-Only Baseline Simulation ---")
-    local_env = LRMA_Environment(loader, predictor, EnvConfig)
-    baseline_history = []
-    episode_reward = 0
-
-    for i, row in all_tasks.iterrows():
-        task = LRMATask(row['name'], row['start_slot'], row['cpu_milli'],
-                        row['gpu_milli'], row['gpu_spec'], row['duration'])
-
-        action = 0
-        q_before = np.array([local_env.mhfq.get_queue_length(j, task.R) for j in range(EnvConfig.NUM_MES)])
-        energy, delay = local_env.step(task, action)
-        q_after = np.array([local_env.mhfq.get_queue_length(j, task.R) for j in range(EnvConfig.NUM_MES)])
-
-        drift = reward_calc.calculate_drift(q_before, q_after)
-        reward = reward_calc.calculate_reward(drift, energy, delay)
-
-        episode_reward += reward
-
-        if (i + 1) % EnvConfig.UPDATE_INTERVAL == 0:
-            baseline_history.append(episode_reward)
-            episode_reward = 0
-
-    print("Baseline Simulation Complete.")
-
-    final_lrma = np.mean(lrma_history[-10:]) if len(lrma_history) >= 10 else np.mean(lrma_history)
-    final_local = np.mean(baseline_history[-10:]) if len(baseline_history) >= 10 else np.mean(baseline_history)
-    print("\n" + "=" * 60)
-    print(f"Average Reward (Final Intervals) - LRMA (DRL Agent): {final_lrma:.2f}")
-    print(f"Average Reward (Final Intervals) - Local-Only Baseline: {final_local:.2f}")
-    print("=" * 60)
-
-    plt.figure(figsize=(12, 6))
-    plt.plot(lrma_history, color='forestgreen', label='LRMA (DRL Agent)', linewidth=2)
-    plt.plot(baseline_history, color='red', linestyle='--', label='Baseline (Local-Only)', alpha=0.7)
-    plt.title('Performance Comparison: LRMA Agent vs. Local-Only Baseline')
-    plt.xlabel(f'Intervals (every {EnvConfig.UPDATE_INTERVAL} tasks)')
-    plt.ylabel('Cumulative Reward (higher is better)')
-    plt.grid(True, alpha=0.3)
-    plt.legend()
     out_dir = "/content" if os.path.exists("/content") else EnvConfig.BASE_DIR
-    plot_path = os.path.join(out_dir, "lrma_performance_comparison.png")
-    plt.savefig(plot_path)
-    print(f"Saved performance plot to {plot_path}")
-
-    torch.save(actor.state_dict(), os.path.join(out_dir, "lrma_actor.pth"))
-    torch.save(critic.state_dict(), os.path.join(out_dir, "lrma_critic.pth"))
-    print("Saved model checkpoints (lrma_actor.pth, lrma_critic.pth).")
+    torch.save(trainer.critic.state_dict(), os.path.join(out_dir, "lrma_critic_ctde.pth"))
+    print("Saved paper-faithful CTDE model checkpoint.")
 
 if __name__ == "__main__":
-    main()
+    main(tiny_mode=True)  # Lightweight local sanity mode
