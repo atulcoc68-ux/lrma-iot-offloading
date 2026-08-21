@@ -25,11 +25,12 @@ class TestLRMATrainingArchitecture:
         for actor in trainer.ed_primary_actors:
             assert actor.state_dim == 9
             assert actor.action_dim == 2
-            x = torch.randn(1, 9)
+            device = next(actor.parameters()).device
+            x = torch.randn(1, 9, device=device)
             out = actor(x)
             assert out.shape == (1, 2)
             # Softmax outputs sum to 1
-            assert torch.allclose(out.sum(dim=-1), torch.tensor([1.0]))
+            assert torch.allclose(out.sum(dim=-1), torch.tensor([1.0], device=device))
 
         # 3. ED actors do NOT share parameters
         actor_0_params = list(trainer.ed_primary_actors[0].parameters())
@@ -45,10 +46,11 @@ class TestLRMATrainingArchitecture:
         # Cloud actor input = 11, output = 5
         assert cloud_actor.state_dim == 11
         assert cloud_actor.action_dim == 5
-        x = torch.randn(1, 11)
+        device = next(cloud_actor.parameters()).device
+        x = torch.randn(1, 11, device=device)
         out = cloud_actor(x)
         assert out.shape == (1, 5)
-        assert torch.allclose(out.sum(dim=-1), torch.tensor([1.0]))
+        assert torch.allclose(out.sum(dim=-1), torch.tensor([1.0], device=device))
 
     def test_centralized_critic_existence_and_initialization(self):
         N = 25
@@ -58,8 +60,9 @@ class TestLRMATrainingArchitecture:
         assert trainer.critic.joint_state_dim == 236
         assert trainer.critic.joint_action_dim == 55
         
-        s_joint = torch.randn(2, 236)
-        a_joint = torch.randn(2, 55)
+        device = next(trainer.critic.parameters()).device
+        s_joint = torch.randn(2, 236, device=device)
+        a_joint = torch.randn(2, 55, device=device)
         q_val = trainer.critic(s_joint, a_joint)
         assert q_val.shape == (2, 1)
 

@@ -17,10 +17,11 @@ def point_to_uniform_candidate_generation(actor_net, state, P=5):
         candidates (list of int): List of P sampled discrete action choices.
         probs (torch.Tensor): Softmax probability distribution over actions.
     """
+    device = next(actor_net.parameters()).device
     if isinstance(state, np.ndarray):
-        state_t = torch.FloatTensor(state).unsqueeze(0)
+        state_t = torch.FloatTensor(state).unsqueeze(0).to(device)
     else:
-        state_t = state if state.dim() > 1 else state.unsqueeze(0)
+        state_t = (state if state.dim() > 1 else state.unsqueeze(0)).to(device)
         
     with torch.no_grad():
         probs = actor_net(state_t).squeeze(0)
