@@ -8,7 +8,6 @@ import numpy as np
 from src.lrma_trainer import LRMATrainer
 
 def compute_entropy(probs):
-    # probs: (batch, num_actions) or (num_actions,)
     eps = 1e-12
     p_safe = torch.clamp(probs, min=eps)
     return -(p_safe * torch.log(p_safe)).sum(dim=-1).mean().item()
@@ -48,10 +47,11 @@ def measure_actor_gradients(trainer, states_t, actions_t):
 
 
 def main():
-    print(f"Device: {'cuda' if torch.cuda.is_available() else 'cpu'}")
-    trainer = LRMATrainer(num_ed=25, num_mes=5)
+    device_str = 'cuda' if torch.cuda.is_available() else 'cpu'
+    print(f"Device: {device_str}")
+    trainer = LRMATrainer(num_ed=25, num_mes=5, device=device_str)
 
-    # Populate replay buffer with 64 real-shaped transitions
+    # Populate replay buffer with 64 real-shaped CTDE transitions
     batch_size = 64
     np.random.seed(42)
     torch.manual_seed(42)
@@ -103,9 +103,7 @@ def main():
     history = []
 
     for step in range(1, 21):
-        # Measure gradient norm prior to update
         grad_ed, grad_cloud = measure_actor_gradients(trainer, states_t, actions_t)
-
         actor_loss, critic_loss = trainer.train_step(batch_size=64, gamma=0.99, xi_soft=0.01)
 
         with torch.no_grad():
