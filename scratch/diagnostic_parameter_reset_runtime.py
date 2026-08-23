@@ -48,7 +48,7 @@ def main():
     print(f"Device: {device}")
     trainer = LRMATrainer(num_ed=25, num_mes=5, device=device)
 
-    # 2. Snapshot parameters before reset
+    # 2. Snapshot parameters before direct reset call
     ed_pri_hidden_before = [get_layer_weights(a, 0) for a in trainer.ed_primary_actors]
     ed_pri_last_before = [get_layer_weights(a, 4) for a in trainer.ed_primary_actors]
 
@@ -77,7 +77,7 @@ def main():
     critic_after = get_all_weights(trainer.critic)
     critic_target_after = get_all_weights(trainer.critic_target)
 
-    # 5. Property Verifications
+    # 5. Property Verifications for Direct Reset Call
     results = {}
 
     # Property 1: ED Primary Last Layer Changed
@@ -130,9 +130,9 @@ def main():
     critic_target_same, _ = compare_weights(critic_target_before, critic_target_after)
     results["8. Centralized Target Critic Unchanged"] = "PASS" if critic_target_same else "FAIL"
 
-    # 6. Test Trigger Logic
+    # 6. Test Trigger Logic using Method Spy (ignoring normal SGD weight updates)
     print("\n============================================================")
-    print("TESTING PARAMETER RESET TRIGGER LOGIC")
+    print("TESTING PARAMETER RESET TRIGGER LOGIC (METHOD SPY)")
     print("============================================================")
 
     # Setup dummy experience in replay buffer for train_step testing
@@ -147,33 +147,35 @@ def main():
     for i in range(100):
         trainer.replay_buffer_ed.add(dummy_s[i], dummy_a[i], dummy_r[i], dummy_ns[i], dummy_d[i])
 
+    # Method Spy setup
+    reset_invocation_count = 0
+    real_reset_method = trainer.reset_primary_parameters
+
+    def spy_reset_primary_parameters():
+        nonlocal reset_invocation_count
+        reset_invocation_count += 1
+        real_reset_method()
+
+    trainer.reset_primary_parameters = spy_reset_primary_parameters
+
     # Test Step Trigger Logic (eval_step=49 vs 50)
     trainer.total_update_steps = 48
-    w_before_49, _ = get_layer_weights(trainer.cloud_primary_actor, 4)
+    reset_invocation_count = 0
     trainer.train_step(batch_size=64, delta_reset=50) # total_update_steps becomes 49
-    w_after_49, _ = get_layer_weights(trainer.cloud_primary_actor, 4)
-    step_49_no_reset = np.max(np.abs(w_before_49 - w_after_49)) < 1e-7
-    results["9. Trigger Step 49 No Reset"] = "PASS" if step_49_no_reset else "FAIL"
+    results["9. Trigger Step 49 No Reset"] = "PASS" if reset_invocation_count == 0 else "FAIL"
 
-    w_before_50, _ = get_layer_weights(trainer.cloud_primary_actor, 4)
+    reset_invocation_count = 0
     trainer.train_step(batch_size=64, delta_reset=50) # total_update_steps becomes 50 -> TRIGGER RESET!
-    w_after_50, _ = get_layer_weights(trainer.cloud_primary_actor, 4)
-    step_50_did_reset = np.max(np.abs(w_before_50 - w_after_50)) > 1e-7
-    results["10. Trigger Step 50 Did Reset"] = "PASS" if step_50_did_reset else "FAIL"
+    results["10. Trigger Step 50 Did Reset"] = "PASS" if reset_invocation_count == 1 else "FAIL"
 
     # Test Slot Trigger Logic (slot_t=49 vs 50)
-    trainer.total_update_steps = 1
-    w_before_slot49, _ = get_layer_weights(trainer.cloud_primary_actor, 4)
+    reset_invocation_count = 0
     trainer.train_step(batch_size=64, delta_reset=50, slot_t=49)
-    w_after_slot49, _ = get_layer_weights(trainer.cloud_primary_actor, 4)
-    slot_49_no_reset = np.max(np.abs(w_before_slot49 - w_after_slot49)) < 1e-7
-    results["11. Slot_t=49 No Reset"] = "PASS" if slot_49_no_reset else "FAIL"
+    results["11. Slot_t=49 No Reset"] = "PASS" if reset_invocation_count == 0 else "FAIL"
 
-    w_before_slot50, _ = get_layer_weights(trainer.cloud_primary_actor, 4)
+    reset_invocation_count = 0
     trainer.train_step(batch_size=64, delta_reset=50, slot_t=50)
-    w_after_slot50, _ = get_layer_weights(trainer.cloud_primary_actor, 4)
-    slot_50_did_reset = np.max(np.abs(w_before_slot50 - w_after_slot50)) > 1e-7
-    results["12. Slot_t=50 Did Reset"] = "PASS" if slot_50_did_reset else "FAIL"
+    results["12. Slot_t=50 Did Reset"] = "PASS" if reset_invocation_count == 1 else "FAIL"
 
     print("\n============================================================")
     print("VERIFICATION RESULTS SUMMARY")
