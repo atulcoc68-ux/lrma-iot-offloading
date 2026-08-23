@@ -65,6 +65,9 @@ class LRMATrainer:
         self.replay_buffer_ed = LRMAPersistentReplayBuffer(capacity=10000)
         self.replay_buffer_cloud = LRMAPersistentReplayBuffer(capacity=10000)
 
+        # Optimizer Update Step Counter (tracks training update steps)
+        self.total_update_steps = 0
+
     def select_ed_action(self, ed_idx, state_ed, P=5):
         """
         Generates P=5 candidates via point-to-uniform variation for ED actor `ed_idx`.
@@ -97,7 +100,7 @@ class LRMATrainer:
         vecs.append(cloud_one_hot)
         return np.concatenate(vecs, axis=0)
 
-    def train_step(self, batch_size=64, gamma=0.99, xi_soft=0.01):
+    def train_step(self, batch_size=64, gamma=0.99, xi_soft=0.01, delta_reset=50, slot_t=None):
         """
         Performs one CTDE minibatch update on persistent replay buffer:
           1. Samples minibatch B=64 from persistent experience replay.
@@ -105,9 +108,12 @@ class LRMATrainer:
           3. Updates Centralized Critic via MSE loss.
           4. Updates ED & Cloud primary actors via Centralized Critic policy gradient.
           5. Soft updates target networks with xi_soft = 0.01.
+          6. Resets Primary Actor Networks' last layer parameters every delta_reset = 50 slots/update steps (Algorithm 1, lines 26-28).
         """
         if len(self.replay_buffer_ed) < batch_size:
             return 0.0, 0.0
+
+        self.total_update_steps += 1
 
         states, actions, rewards, next_states, dones = self.replay_buffer_ed.sample(batch_size)
 
@@ -119,8 +125,37 @@ class LRMATrainer:
 
         # 1. Critic Update (TD Bootstrapping)
         with torch.no_grad():
-            target_next_q = self.critic_target(next_states_t, actions_t)
-            target_y = rewards_t + (1.0 - dones_t) * gamma * target_next_q
+            target_ed_actions = []
+            for idx in range(self.num_ed):
+                ed_next_state = next_states_t[
+                    :,
+                    idx * self.state_dim_ed:
+                    (idx + 1) * self.state_dim_ed
+                ]
+                ed_target_probs = self.ed_target_actors[idx](
+                    ed_next_state
+                )
+                target_ed_actions.append(ed_target_probs)
+
+            cloud_next_state = next_states_t[:, -self.state_dim_cloud:]
+            cloud_target_probs = self.cloud_target_actor(
+                cloud_next_state
+            )
+
+            target_joint_action = torch.cat(
+                target_ed_actions + [cloud_target_probs],
+                dim=-1
+            )
+
+            target_next_q = self.critic_target(
+                next_states_t,
+                target_joint_action
+            )
+
+            target_y = (
+                rewards_t
+                + (1.0 - dones_t) * gamma * target_next_q
+            )
 
         current_q = self.critic(states_t, actions_t)
         critic_loss = nn.MSELoss()(current_q, target_y)
@@ -159,14 +194,18 @@ class LRMATrainer:
         soft_update(self.cloud_target_actor, self.cloud_primary_actor, xi_soft)
         soft_update(self.critic_target, self.critic, xi_soft)
 
+        # 4. Periodic Primary Actor Parameter Resetting (Algorithm 1, lines 26-28)
+        eval_step = slot_t if slot_t is not None else self.total_update_steps
+        if eval_step > 0 and eval_step % delta_reset == 0:
+            self.reset_primary_parameters()
+
         return total_actor_loss / (self.num_ed + 1), critic_loss.item()
 
     def reset_primary_parameters(self):
         """
-        Resets primary network parameters every delta^{reset} = 50 slots (Algorithm 1, lines 26-28).
-        Primary actors and primary critic are re-initialized. Target networks remain intact.
+        Resets ONLY Primary Actor Networks' last layer parameters every delta^{reset} = 50 slots (Algorithm 1, lines 26-28).
+        Target networks, Centralized Critic, and earlier Actor hidden layers remain completely intact.
         """
         for p in self.ed_primary_actors:
-            p.reset_parameters()
-        self.cloud_primary_actor.reset_parameters()
-        self.critic.reset_parameters()
+            p.reset_last_layer_parameters()
+        self.cloud_primary_actor.reset_last_layer_parameters()

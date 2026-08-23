@@ -27,16 +27,19 @@ class EDActor(nn.Module):
     def forward(self, state):
         return self.net(state)
 
+    def reset_last_layer_parameters(self):
+        """
+        Resets ONLY the primary Actor network's last layer parameters every delta^{reset} = 50 slots (Algorithm 1, line 27).
+        """
+        last_layer = self.net[4]
+        if isinstance(last_layer, nn.Linear):
+            nn.init.xavier_uniform_(last_layer.weight)
+            if last_layer.bias is not None:
+                nn.init.constant_(last_layer.bias, 0.0)
+
     def reset_parameters(self):
-        """
-        Resets primary network parameters every delta^{reset} = 50 slots (Algorithm 1, line 27).
-        Mitigates primacy bias (Nikishin et al., 2022).
-        """
-        for m in self.net.modules():
-            if isinstance(m, nn.Linear):
-                nn.init.xavier_uniform_(m.weight)
-                if m.bias is not None:
-                    nn.init.constant_(m.bias, 0.0)
+        """Resets primary actor network's last layer parameters (Algorithm 1, line 27)."""
+        self.reset_last_layer_parameters()
 
 
 class CloudActor(nn.Module):
@@ -62,15 +65,19 @@ class CloudActor(nn.Module):
     def forward(self, state):
         return self.net(state)
 
+    def reset_last_layer_parameters(self):
+        """
+        Resets ONLY the primary Cloud Actor network's last layer parameters every delta^{reset} = 50 slots (Algorithm 1, line 27).
+        """
+        last_layer = self.net[4]
+        if isinstance(last_layer, nn.Linear):
+            nn.init.xavier_uniform_(last_layer.weight)
+            if last_layer.bias is not None:
+                nn.init.constant_(last_layer.bias, 0.0)
+
     def reset_parameters(self):
-        """
-        Resets primary Cloud actor network parameters every delta^{reset} = 50 slots (Algorithm 1, line 27).
-        """
-        for m in self.net.modules():
-            if isinstance(m, nn.Linear):
-                nn.init.xavier_uniform_(m.weight)
-                if m.bias is not None:
-                    nn.init.constant_(m.bias, 0.0)
+        """Resets primary Cloud actor network's last layer parameters (Algorithm 1, line 27)."""
+        self.reset_last_layer_parameters()
 
 
 class CentralizedCritic(nn.Module):
