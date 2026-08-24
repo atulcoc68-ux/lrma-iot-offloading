@@ -45,18 +45,18 @@ def evaluate_policy(algorithm='LRMA', num_ed=EnvConfig.NUM_ED, V_val=EnvConfig.V
     env = LRMA_Environment(loader, predictor, EnvConfig, queue_type=queue_type, num_ed=num_ed, V_val=V_val)
     
     state_dim_ed = 9
-    action_dim_ed = num_ed + 1
+    action_dim_ed = 2
     state_dim_cloud = 5 + EnvConfig.NUM_MES + 1
     action_dim_cloud = EnvConfig.NUM_MES
 
     if algorithm == 'MA3MCO':
-        actor_ed = MA3MCOActor(state_dim_ed, action_dim_ed)
+        actor_ed = MA3MCOActor(state_dim_ed, num_ed + 1)
         actor_cloud = MA3MCOActor(state_dim_cloud, action_dim_cloud)
     elif algorithm == 'L-MADDPG':
-        actor_ed = LMADDPGActor(state_dim_ed, action_dim_ed)
+        actor_ed = LMADDPGActor(state_dim_ed, num_ed + 1)
         actor_cloud = LMADDPGActor(state_dim_cloud, action_dim_cloud)
     elif algorithm == 'DVCCO':
-        actor_ed = DVCCOAgent(state_dim_ed, action_dim_ed)
+        actor_ed = DVCCOAgent(state_dim_ed, num_ed + 1)
         actor_cloud = DVCCOAgent(state_dim_cloud, action_dim_cloud)
     else:
         # LRMA Policy

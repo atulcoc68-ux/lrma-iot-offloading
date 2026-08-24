@@ -71,7 +71,7 @@ class LRMATask:
 
     @classmethod
     def from_dict(cls, data):
-        return cls(
+        task = cls(
             task_id=data['task_id'],
             arrival_slot=data['arrival_slot'],
             cpu_milli=data['cpu_milli'],
@@ -80,6 +80,11 @@ class LRMATask:
             duration=data['duration'],
             ed_id=data.get('ed_id', 0)
         )
+
+        if 'gpu_type' in data:
+            task.R = int(data['gpu_type'])
+
+        return task
 
     def __repr__(self):
         return f"LRMA_Task(ID={self.task_id}, ED={self.ed_id}, size={self.size/8e6:.2f}MB, C={self.C}, G={self.G}, R={self.R})"
