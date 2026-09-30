@@ -52,6 +52,7 @@ class LRMA_Environment:
 
         self.current_time_slot = 0
         self.history_arrival_states = []
+        self.current_beta_hat = np.zeros(4, dtype=np.float32)
 
     def get_ed_state(self, ed_idx, task, pending_tasks):
         r"""
@@ -74,14 +75,14 @@ class LRMA_Environment:
         # Neighboring MES backlogs \sum_{j=1}^n Q_es_j(t)
         q_es_sum = float(np.sum(self.q_es)) / 8e6
 
-        # LSTM predicted future arrival state \beta_i^{t+1}
-        beta_hat = get_future_workload_estimate(self.predictor, self.history_arrival_states)
+        # LSTM predicted future arrival state \beta_i^{t+1} (cached per slot)
+        beta_val = self.current_beta_hat[0] if isinstance(self.current_beta_hat, (list, np.ndarray)) else float(self.current_beta_hat)
 
         state = np.array([
             t_size, t_c, t_g, t_r,
             pending_count, pending_size,
             q_dev, q_es_sum,
-            beta_hat[0] if isinstance(beta_hat, (list, np.ndarray)) else float(beta_hat)
+            beta_val
         ], dtype=np.float32)
 
         return state
@@ -100,10 +101,10 @@ class LRMA_Environment:
         offloaded_count = len(offloaded_tasks)
         mes_queues = [float(self.q_es[j]) / 8e6 for j in range(self.num_mes)]
 
-        beta_hat = get_future_workload_estimate(self.predictor, self.history_arrival_states)
+        beta_val = self.current_beta_hat[0] if isinstance(self.current_beta_hat, (list, np.ndarray)) else float(self.current_beta_hat)
 
         state = np.array(
-            [t_size, t_c, t_g, t_r, offloaded_count] + mes_queues + [beta_hat[0] if isinstance(beta_hat, (list, np.ndarray)) else float(beta_hat)],
+            [t_size, t_c, t_g, t_r, offloaded_count] + mes_queues + [beta_val],
             dtype=np.float32
         )
         return state
@@ -202,6 +203,7 @@ class LRMA_Environment:
             state_vec = np.zeros(4, dtype=np.float32)
 
         self.history_arrival_states.append(state_vec)
+        self.current_beta_hat = get_future_workload_estimate(self.predictor, self.history_arrival_states)
 
         # Decay queues per slot duration \tau = 1s based on processed capacity (Paper Eq. 1-4)
         processed_cap_ed = (self.config.LOCAL_CPU_CAPACITY * self.config.TAU) / float(self.config.RHO)

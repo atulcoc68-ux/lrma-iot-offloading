@@ -71,7 +71,7 @@ class LRMATask:
 
     @classmethod
     def from_dict(cls, data):
-        return cls(
+        task = cls(
             task_id=data['task_id'],
             arrival_slot=data['arrival_slot'],
             cpu_milli=data['cpu_milli'],
@@ -80,6 +80,11 @@ class LRMATask:
             duration=data['duration'],
             ed_id=data.get('ed_id', 0)
         )
+
+        if 'gpu_type' in data:
+            task.R = int(data['gpu_type'])
+
+        return task
 
     def __repr__(self):
         return f"LRMA_Task(ID={self.task_id}, ED={self.ed_id}, size={self.size/8e6:.2f}MB, C={self.C}, G={self.G}, R={self.R})"
@@ -90,6 +95,10 @@ class AlibabaWorkloadLoader:
     Processes the Alibaba PAI trace for LRMA simulation.
     Supports strict Train/Test workload separation and reproducible slot task sequence generation.
     """
+    _cached_tasks_df = None
+    _cached_counts = None
+    _cached_splits = {}
+
     def __init__(self, pods_file=None, nodes_file=None):
         self.pods_file = pods_file or EnvConfig.PODS_FILE
         self.nodes_file = nodes_file or EnvConfig.NODES_FILE
@@ -104,6 +113,10 @@ class AlibabaWorkloadLoader:
         self.train_df, self.test_df = self._create_train_test_split(test_ratio=0.3, seed=42)
 
     def _load_and_clean_dataset(self):
+        if AlibabaWorkloadLoader._cached_tasks_df is not None:
+            self.total_node_count, self.gpu_node_count, self.raw_task_count, self.cleaned_task_count = AlibabaWorkloadLoader._cached_counts
+            return AlibabaWorkloadLoader._cached_tasks_df.copy()
+
         # 1. Load Nodes
         if os.path.exists(self.all_nodes_file):
             nodes_all_df = pd.read_csv(self.all_nodes_file)
@@ -152,23 +165,29 @@ class AlibabaWorkloadLoader:
         cleaned_df['start_slot'] = ((cleaned_df['creation_time'] - min_time) / 10.0).astype(int) % EnvConfig.TOTAL_SLOTS
 
         self.cleaned_task_count = len(cleaned_df)
-        return cleaned_df.reset_index(drop=True)
+        AlibabaWorkloadLoader._cached_tasks_df = cleaned_df.reset_index(drop=True)
+        AlibabaWorkloadLoader._cached_counts = (self.total_node_count, self.gpu_node_count, self.raw_task_count, self.cleaned_task_count)
+        return AlibabaWorkloadLoader._cached_tasks_df.copy()
 
     def _create_train_test_split(self, test_ratio=0.3, seed=42):
         """Splits cleaned trace into disjoint Train (70%) and Test (30%) sets."""
+        if seed in AlibabaWorkloadLoader._cached_splits:
+            return AlibabaWorkloadLoader._cached_splits[seed]
         shuffled = self.tasks_df.sample(frac=1.0, random_state=seed).reset_index(drop=True)
         split_idx = int(len(shuffled) * (1.0 - test_ratio))
         train_df = shuffled.iloc[:split_idx].reset_index(drop=True)
         test_df = shuffled.iloc[split_idx:].reset_index(drop=True)
+        AlibabaWorkloadLoader._cached_splits[seed] = (train_df, test_df)
         return train_df, test_df
 
     def generate_reproducible_slot_workload(self, dataset_split='test', seed=42, num_ed=EnvConfig.NUM_ED,
-                                             total_slots=EnvConfig.TOTAL_SLOTS, arrival_rate=0.6):
+                                             total_slots=EnvConfig.TOTAL_SLOTS, arrival_rate=0.6,
+                                             calibrated=False):
         """
         Generates and saves deterministic 300-slot task workload sequence for seed.
         Structured PER ED: workload_by_slot[t][ed_id] = [task1, task2, ...]
-        |m_i^t| ~ Binomial(Max_n=5, arrival_rate) for each slot t and ED i.
-        EXPLICIT ASSUMPTION: Binomial per-ED arrival process (Paper Eq. 19g).
+        When calibrated=True: |m_i^t| ~ Bernoulli(arrival_rate) matching empirical paper density (~14.7 tasks/slot).
+        When calibrated=False: |m_i^t| ~ Binomial(Max_n=5, arrival_rate) (Eq. 19g upper bound).
         Guarantees ALL comparative algorithms receive the IDENTICAL task workload.
         """
         df = self.train_df if dataset_split == 'train' else self.test_df
@@ -177,11 +196,12 @@ class AlibabaWorkloadLoader:
         workload_by_slot = {}
         task_pointer = 0
         num_tasks = len(df)
+        max_trials = 1 if calibrated else EnvConfig.MAX_N
 
         for t in range(1, total_slots + 1):
             slot_workload = {}
             for ed_id in range(num_ed):
-                num_generated_ed = int(rng.binomial(EnvConfig.MAX_N, arrival_rate))
+                num_generated_ed = int(rng.binomial(max_trials, arrival_rate))
                 ed_task_list = []
                 for _ in range(num_generated_ed):
                     row = df.iloc[task_pointer % num_tasks]

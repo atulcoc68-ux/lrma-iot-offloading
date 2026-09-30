@@ -93,3 +93,24 @@ def get_future_workload_estimate(model, history_seq):
         x_tensor = torch.FloatTensor(history_arr[-EnvConfig.SEQ_LENGTH:]).unsqueeze(0)
         beta_hat = model(x_tensor).squeeze(0).numpy()
         return beta_hat
+
+
+def quantize_predictor(model):
+    """
+    Applies dynamic INT8 quantization to WorkloadPredictor (LSTM + Linear).
+    Automatically configures backend engine (qnnpack for ARM/aarch64, fbgemm for x86).
+    """
+    import platform
+    machine = platform.machine().lower()
+    if 'aarch64' in machine or 'arm' in machine:
+        torch.backends.quantized.engine = 'qnnpack'
+    elif 'fbgemm' in torch.backends.quantized.supported_engines:
+        torch.backends.quantized.engine = 'fbgemm'
+    
+    model.eval()
+    quantized_model = torch.ao.quantization.quantize_dynamic(
+        model,
+        {torch.nn.LSTM, torch.nn.Linear},
+        dtype=torch.qint8
+    )
+    return quantized_model
