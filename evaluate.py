@@ -176,9 +176,20 @@ def evaluate_policy(algorithm='LRMA', num_ed=EnvConfig.NUM_ED, V_val=EnvConfig.V
 
 
 if __name__ == "__main__":
-    summary, _, _ = evaluate_policy(algorithm='LRMA', seed=42)
+    import argparse
+    parser = argparse.ArgumentParser(description="LRMA Policy Evaluation")
+    parser.add_argument("--algorithm", type=str, default="LRMA", choices=["LRMA", "MA3MCO", "L-MADDPG", "DVCCO"])
+    parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--slots", type=int, default=EnvConfig.TOTAL_SLOTS)
+    parser.add_argument("--quantized", action="store_true", help="Use dynamic INT8 quantized LSTM")
+    args = parser.parse_args()
+
+    summary, _, _ = evaluate_policy(
+        algorithm=args.algorithm, seed=args.seed, total_slots=args.slots,
+        use_quantized_lstm=args.quantized
+    )
     print("\n" + "=" * 60)
-    print("LRMA POLICY EVALUATION SUMMARY (DYNAMIC RUN)")
+    print(f"{args.algorithm} POLICY EVALUATION SUMMARY (DYNAMIC RUN | Quantized={args.quantized})")
     print("=" * 60)
     for k, v in summary.items():
         print(f"{k:30s}: {v}")

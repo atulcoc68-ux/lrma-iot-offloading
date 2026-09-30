@@ -88,3 +88,26 @@ Run `run_colab_reproduction.py` or open `colab_setup.ipynb` in Google Colab. The
 - **Figure 6 & 7 (Parameter Reset)**: Periodic parameter resetting reduces all-task processing delay by ~28% and average delay by ~33%, mitigating primacy bias.
 - **Figure 8 (MHFQ Framework)**: MHFQ reduces completion delay by ~16.4% over FCFS and ~21.1% over average delay due to time-slice rotation fairness.
 - **Figure 9 & 10 (Algorithm Comparison)**: LRMA outperforms MA3MCO, L-MADDPG, and DVCCO across all task arrival rates ($40\%, 60\%, 80\%$), achieving a peak offloading ratio near 50%.
+
+---
+
+## Quantized INT8 LSTM Workload Prediction
+
+This branch introduces **Dynamic and Static INT8 Quantization** for the LSTM Workload Predictor, reducing storage footprint by **69.0%** (204.97 KB $\to$ 63.59 KB) with virtually zero loss in predictive fidelity ($\text{MSE} = 5.83 \times 10^{-8}$, Pearson $r = 0.9986$):
+
+### 1. Benchmark FP32 vs Quantized INT8 LSTM
+```bash
+python scripts/compare_quantized_lstm.py
+```
+
+### 2. Run Policy Evaluation with Quantized LSTM
+```bash
+python evaluate.py --quantized --slots 50
+```
+
+### 3. Run Dedicated PTQ Pipeline (quant_lstm/)
+```bash
+cd quant_lstm
+python quantize_lstm.py --epochs 300 --batch-size 16 --lat-runs 1000
+```
+For detailed metrics, see [reports/quantized_lstm_report.md](reports/quantized_lstm_report.md) and [reports/comprehensive_accuracy_and_paper_results_comparison.md](reports/comprehensive_accuracy_and_paper_results_comparison.md).
