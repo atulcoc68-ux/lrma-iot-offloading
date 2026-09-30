@@ -129,13 +129,13 @@ class TestLRMATrainingArchitecture:
         trainer = LRMATrainer(num_ed=25, num_mes=5)
         actor_0 = trainer.ed_primary_actors[0]
         
-        # Record weights before reset
-        old_weights = actor_0.net[0].weight.clone()
+        # Record last layer weights before reset (Algorithm 1, line 27)
+        old_weights = actor_0.net[4].weight.clone()
         
         # Trigger reset
         trainer.reset_primary_parameters()
         
-        new_weights = actor_0.net[0].weight.clone()
+        new_weights = actor_0.net[4].weight.clone()
         assert not torch.allclose(old_weights, new_weights)
 
     def test_ppo_components_absent_from_lrma_trainer(self):

@@ -9,14 +9,14 @@ import pandas as pd
 try:
     from src.config import EnvConfig
     from src.data_loader import AlibabaWorkloadLoader, LRMATask
-    from src.lstm_model import WorkloadPredictor
+    from src.lstm_model import WorkloadPredictor, quantize_predictor
     from src.agents import DRLActor, MA3MCOActor, LMADDPGActor, DVCCOAgent
     from src.environment import LRMA_Environment
     from src.lyapunov import LRMARewardCalculator
 except ModuleNotFoundError:
     from config import EnvConfig
     from data_loader import AlibabaWorkloadLoader, LRMATask
-    from lstm_model import WorkloadPredictor
+    from lstm_model import WorkloadPredictor, quantize_predictor
     from agents import DRLActor, MA3MCOActor, LMADDPGActor, DVCCOAgent
     from environment import LRMA_Environment
     from lyapunov import LRMARewardCalculator
@@ -24,10 +24,12 @@ except ModuleNotFoundError:
 
 def evaluate_policy(algorithm='LRMA', num_ed=EnvConfig.NUM_ED, V_val=EnvConfig.V,
                     queue_type='MHFQ', reset_enabled=True, task_arrival_rate=0.6,
-                    seed=42, total_slots=EnvConfig.TOTAL_SLOTS):
+                    seed=42, total_slots=EnvConfig.TOTAL_SLOTS, save_raw_tasks=False,
+                    calibrated=True, use_quantized_lstm=False):
     """
     Evaluates an offloading algorithm on real Alibaba workload trace (30% Evaluation Split).
     Guarantees all comparative algorithms receive the IDENTICAL slot workload sequence per seed.
+    Supports optional INT8 Quantized LSTM for ultra-low latency prediction.
     """
     np.random.seed(seed)
     torch.manual_seed(seed)
@@ -36,10 +38,13 @@ def evaluate_policy(algorithm='LRMA', num_ed=EnvConfig.NUM_ED, V_val=EnvConfig.V
     
     # Generate/load reproducible slot workload from 30% Test split
     workload_by_slot = loader.generate_reproducible_slot_workload(
-        dataset_split='test', seed=seed, num_ed=num_ed, total_slots=total_slots, arrival_rate=task_arrival_rate
+        dataset_split='test', seed=seed, num_ed=num_ed, total_slots=total_slots,
+        arrival_rate=task_arrival_rate, calibrated=calibrated
     )
 
     predictor = WorkloadPredictor(input_dim=4, hidden_dim=64, output_dim=4, num_layers=2)
+    if use_quantized_lstm:
+        predictor = quantize_predictor(predictor)
     predictor.eval()
 
     env = LRMA_Environment(loader, predictor, EnvConfig, queue_type=queue_type, num_ed=num_ed, V_val=V_val)
@@ -119,21 +124,22 @@ def evaluate_policy(algorithm='LRMA', num_ed=EnvConfig.NUM_ED, V_val=EnvConfig.V
                 task_energies.append(res['energy'])
                 offload_decisions.append(1 if res['is_offloaded'] else 0)
 
-                task_records.append({
-                    'slot': t,
-                    'task_id': task.task_id,
-                    'ed_idx': ed_idx,
-                    'task_size_bits': task.size,
-                    'gpu_type': task.R,
-                    'is_offloaded': res['is_offloaded'],
-                    'mes_assigned': res['mes_assigned'],
-                    'delay': res['delay'],
-                    'energy': res['energy'],
-                    'seed': seed,
-                    'algorithm': algorithm,
-                    'queue_type': queue_type,
-                    'dataset_split': 'test'
-                })
+                if save_raw_tasks:
+                    task_records.append({
+                        'slot': t,
+                        'task_id': task.task_id,
+                        'ed_idx': ed_idx,
+                        'task_size_bits': task.size,
+                        'gpu_type': task.R,
+                        'is_offloaded': res['is_offloaded'],
+                        'mes_assigned': res['mes_assigned'],
+                        'delay': res['delay'],
+                        'energy': res['energy'],
+                        'seed': seed,
+                        'algorithm': algorithm,
+                        'queue_type': queue_type,
+                        'dataset_split': 'test'
+                    })
 
         ed_queue_history.append(float(np.mean(env.q_device)))
         mes_queue_history.append(float(np.mean(env.q_es)))
@@ -160,11 +166,11 @@ def evaluate_policy(algorithm='LRMA', num_ed=EnvConfig.NUM_ED, V_val=EnvConfig.V
         'mes_queue_mean_bits': float(np.mean(mes_queue_history))
     }
 
-    # Save raw CSV task records
-    raw_df = pd.DataFrame(task_records)
-    raw_filename = f"raw_eval_{algorithm}_N{num_ed}_V{int(V_val)}_reset{reset_enabled}_seed{seed}.csv"
-    raw_path = os.path.join(EnvConfig.RAW_RESULTS_DIR, raw_filename)
-    raw_df.to_csv(raw_path, index=False)
+    if save_raw_tasks and task_records:
+        raw_df = pd.DataFrame(task_records)
+        raw_filename = f"raw_eval_{algorithm}_N{num_ed}_V{int(V_val)}_reset{reset_enabled}_seed{seed}.csv"
+        raw_path = os.path.join(EnvConfig.RAW_RESULTS_DIR, raw_filename)
+        raw_df.to_csv(raw_path, index=False)
 
     return summary, np.array(ed_queue_history), np.array(mes_queue_history)
 

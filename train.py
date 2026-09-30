@@ -234,101 +234,96 @@ def train_lrma_agent(seed=42, num_ed=EnvConfig.NUM_ED, V_val=EnvConfig.V,
                     s_ed_arr, s_cloud, next_s_ed_arr, next_s_cloud
                 ))
 
-                # Maintain replay buffer capacity
                 if len(replay_buffer) > 10000:
                     replay_buffer.pop(0)
 
-                # -------------------------------------------------------------
-                # 4. Centralized Critic & Discrete Actor Training Update
-                # -------------------------------------------------------------
-                if len(replay_buffer) >= EnvConfig.BATCH_SIZE:
-                    batch = random.sample(replay_buffer, EnvConfig.BATCH_SIZE)
+        # -------------------------------------------------------------
+        # 4. Centralized Critic & Discrete Actor Training Update (Algorithm 1, lines 23-29)
+        # -------------------------------------------------------------
+        if len(replay_buffer) >= EnvConfig.BATCH_SIZE:
+            for _ in range(2):  # Minibatch updates per slot
+                batch = random.sample(replay_buffer, EnvConfig.BATCH_SIZE)
 
-                    b_joint_state = torch.FloatTensor(np.array([item[0] for item in batch]))
-                    b_joint_action = torch.FloatTensor(np.array([item[1] for item in batch]))
-                    b_reward = torch.FloatTensor(np.array([item[2] for item in batch])).unsqueeze(1)
-                    b_next_joint_state = torch.FloatTensor(np.array([item[3] for item in batch]))
-                    b_done = torch.FloatTensor(np.array([item[4] for item in batch])).unsqueeze(1)
+                b_joint_state = torch.FloatTensor(np.array([item[0] for item in batch]))
+                b_joint_action = torch.FloatTensor(np.array([item[1] for item in batch]))
+                b_reward = torch.FloatTensor(np.array([item[2] for item in batch])).unsqueeze(1)
+                b_next_joint_state = torch.FloatTensor(np.array([item[3] for item in batch]))
+                b_done = torch.FloatTensor(np.array([item[4] for item in batch])).unsqueeze(1)
 
-                    b_s_ed_arr = torch.FloatTensor(np.array([item[5] for item in batch]))    # (B, N, state_dim_ed)
-                    b_s_cloud = torch.FloatTensor(np.array([item[6] for item in batch]))     # (B, state_dim_cloud)
-                    b_next_s_ed_arr = torch.FloatTensor(np.array([item[7] for item in batch]))
-                    b_next_s_cloud = torch.FloatTensor(np.array([item[8] for item in batch]))
+                b_s_ed_arr = torch.FloatTensor(np.array([item[5] for item in batch]))    # (B, N, state_dim_ed)
+                b_s_cloud = torch.FloatTensor(np.array([item[6] for item in batch]))     # (B, state_dim_cloud)
+                b_next_s_ed_arr = torch.FloatTensor(np.array([item[7] for item in batch]))
+                b_next_s_cloud = torch.FloatTensor(np.array([item[8] for item in batch]))
 
-                    # ---------------------------------------------------------
-                    # A. Centralized Critic Update (TD Target)
-                    # ---------------------------------------------------------
-                    with torch.no_grad():
-                        next_act_probs_ed = [ed_target_actors[i](b_next_s_ed_arr[:, i, :]) for i in range(num_ed)]
-                        next_act_probs_cloud = cloud_target_actor(b_next_s_cloud)
-                        next_joint_act_probs = torch.cat(next_act_probs_ed + [next_act_probs_cloud], dim=-1)
+                # A. Centralized Critic Update (TD Target)
+                with torch.no_grad():
+                    next_act_probs_ed = [ed_target_actors[i](b_next_s_ed_arr[:, i, :]) for i in range(num_ed)]
+                    next_act_probs_cloud = cloud_target_actor(b_next_s_cloud)
+                    next_joint_act_probs = torch.cat(next_act_probs_ed + [next_act_probs_cloud], dim=-1)
 
-                        q_target_next = critic_target(b_next_joint_state, next_joint_act_probs)
-                        y_target = b_reward + gamma * (1.0 - b_done) * q_target_next
+                    q_target_next = critic_target(b_next_joint_state, next_joint_act_probs)
+                    y_target = b_reward + gamma * (1.0 - b_done) * q_target_next
 
-                    q_current = critic(b_joint_state, b_joint_action)
-                    critic_loss = nn.MSELoss()(q_current, y_target)
+                q_current = critic(b_joint_state, b_joint_action)
+                critic_loss = nn.MSELoss()(q_current, y_target)
 
-                    critic_optimizer.zero_grad()
-                    critic_loss.backward()
-                    last_critic_grad_norm = compute_grad_norm(critic)
-                    critic_optimizer.step()
+                critic_optimizer.zero_grad()
+                critic_loss.backward()
+                last_critic_grad_norm = compute_grad_norm(critic)
+                critic_optimizer.step()
 
-                    critic_update_count += 1
-                    backward_count += 1
-                    optimizer_step_count += 1
-                    last_critic_loss = float(critic_loss.item())
+                critic_update_count += 1
+                backward_count += 1
+                optimizer_step_count += 1
+                last_critic_loss = float(critic_loss.item())
 
-                    # ---------------------------------------------------------
-                    # B. Discrete Softmax Policy Gradient Actor Updates
-                    # ---------------------------------------------------------
-                    # ED Actors optimization
-                    for i in range(num_ed):
-                        probs_i = ed_primary_actors[i](b_s_ed_arr[:, i, :])  # (B, 2)
+                # B. Discrete Softmax Policy Gradient Actor Updates
+                for i in range(num_ed):
+                    probs_i = ed_primary_actors[i](b_s_ed_arr[:, i, :])
 
-                        joint_probs_list = []
-                        for j in range(num_ed):
-                            if j == i:
-                                joint_probs_list.append(probs_i)
-                            else:
-                                with torch.no_grad():
-                                    joint_probs_list.append(ed_primary_actors[j](b_s_ed_arr[:, j, :]))
-                        with torch.no_grad():
-                            joint_probs_list.append(cloud_primary_actor(b_s_cloud))
-
-                        joint_act_i = torch.cat(joint_probs_list, dim=-1)
-                        q_eval_i = critic(b_joint_state, joint_act_i)
-                        actor_loss_i = -q_eval_i.mean()
-
-                        ed_optimizers[i].zero_grad()
-                        actor_loss_i.backward()
-                        last_actor_grad_norm = compute_grad_norm(ed_primary_actors[i])
-                        ed_optimizers[i].step()
-
-                        actor_update_count += 1
-                        backward_count += 1
-                        optimizer_step_count += 1
-                        last_actor_loss = float(actor_loss_i.item())
-
-                    # Cloud Actor optimization
-                    probs_cloud = cloud_primary_actor(b_s_cloud)  # (B, 5)
                     joint_probs_list = []
                     for j in range(num_ed):
-                        with torch.no_grad():
-                            joint_probs_list.append(ed_primary_actors[j](b_s_ed_arr[:, j, :]))
-                    joint_probs_list.append(probs_cloud)
+                        if j == i:
+                            joint_probs_list.append(probs_i)
+                        else:
+                            with torch.no_grad():
+                                joint_probs_list.append(ed_primary_actors[j](b_s_ed_arr[:, j, :]))
+                    with torch.no_grad():
+                        joint_probs_list.append(cloud_primary_actor(b_s_cloud))
 
-                    joint_act_cloud = torch.cat(joint_probs_list, dim=-1)
-                    q_eval_cloud = critic(b_joint_state, joint_act_cloud)
-                    cloud_actor_loss = -q_eval_cloud.mean()
+                    joint_act_i = torch.cat(joint_probs_list, dim=-1)
+                    q_eval_i = critic(b_joint_state, joint_act_i)
+                    actor_loss_i = -q_eval_i.mean()
 
-                    cloud_optimizer.zero_grad()
-                    cloud_actor_loss.backward()
-                    cloud_optimizer.step()
+                    ed_optimizers[i].zero_grad()
+                    actor_loss_i.backward()
+                    last_actor_grad_norm = compute_grad_norm(ed_primary_actors[i])
+                    ed_optimizers[i].step()
 
                     actor_update_count += 1
                     backward_count += 1
                     optimizer_step_count += 1
+                    last_actor_loss = float(actor_loss_i.item())
+
+                # Cloud Actor optimization
+                probs_cloud = cloud_primary_actor(b_s_cloud)
+                joint_probs_list = []
+                for j in range(num_ed):
+                    with torch.no_grad():
+                        joint_probs_list.append(ed_primary_actors[j](b_s_ed_arr[:, j, :]))
+                joint_probs_list.append(probs_cloud)
+
+                joint_act_cloud = torch.cat(joint_probs_list, dim=-1)
+                q_eval_cloud = critic(b_joint_state, joint_act_cloud)
+                cloud_actor_loss = -q_eval_cloud.mean()
+
+                cloud_optimizer.zero_grad()
+                cloud_actor_loss.backward()
+                cloud_optimizer.step()
+
+                actor_update_count += 1
+                backward_count += 1
+                optimizer_step_count += 1
 
         slot_rewards.append(slot_reward_sum)
         ed_queue_history.append(float(np.mean(env.q_device)))

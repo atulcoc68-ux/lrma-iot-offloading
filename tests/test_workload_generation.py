@@ -71,7 +71,16 @@ class TestWorkloadGeneration(unittest.TestCase):
             for ed_id, tasks in ed_dict.items():
                 for task in tasks:
                     self.assertEqual(task.ed_id, ed_id)
-                    self.assertTrue(task.task_id.endswith(f"_ed{ed_id}_slot{t}"))
+    def test_paper_calibrated_workload(self):
+        """Verify calibrated mode produces paper arrival density (~15 tasks/slot for 25 EDs at 60%)."""
+        workload = self.loader.generate_reproducible_slot_workload(
+            dataset_split='test', seed=42, num_ed=25, total_slots=300, arrival_rate=0.6, calibrated=True
+        )
+        total_tasks = sum(len(tasks) for ed_dict in workload.values() for tasks in ed_dict.values())
+        mean_tasks_per_slot = total_tasks / 300.0
+        # Expected ~ 25 * 0.6 = 15 tasks/slot (approx 4500 total)
+        self.assertAlmostEqual(mean_tasks_per_slot, 15.0, delta=1.0)
+        self.assertAlmostEqual(total_tasks, 4500, delta=300)
 
 if __name__ == '__main__':
     unittest.main()

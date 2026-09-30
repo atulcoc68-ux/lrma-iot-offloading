@@ -10,3 +10,9 @@ env/
 *.pt
 *.csv
 !data/sample_trace.csv
+quant_venv/
+lrma_repo/
+*.onnx
+*.onnx.data
+data/frozen_queue_results/
+data/Original dataset/
