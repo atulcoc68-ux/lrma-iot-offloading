@@ -36,6 +36,11 @@ class EnvConfig:
     # MHFQ Time Slices (Section III-A.2)
     TAU_VES = [0.1, 0.3, 0.6]     # Time slices {tau_1^ves, tau_2^ves, tau_3^ves} in seconds
 
+    # Adaptive MHFQ Parameters
+    ADAPTIVE_MHFQ_SLACK_RATIO = 0.15     # 15% near-completion slack tolerance
+    ADAPTIVE_MHFQ_AGING_THRESHOLD = 1.0  # 1.0s waiting time threshold for anti-starvation priority boost
+    ADAPTIVE_MHFQ_REF_BACKLOG = 2e7      # 20 Mbits reference backlog for congestion adaptation
+
     # Lyapunov & Optimization Parameters (Table II & Eq. 40)
     V = 20.0                # Lyapunov penalty parameter V = 20 (Table II)
     V_SWEEP = [1, 10, 20, 30, 40, 50, 100] # V values for Fig 4 & 5

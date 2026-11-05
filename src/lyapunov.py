@@ -173,19 +173,220 @@ class MHFQProcessor:
         return head_q3.service_time, head_q3.accumulated_waiting_time, head_q3.completion_time, head_q3.completion_delay
 
 
+class AdaptiveMHFQProcessor:
+    """
+    Self-Adaptive Multi-Level Heterogeneous Feedback Queue Processor (Adaptive MHFQ).
+    Enhances baseline MHFQ with:
+    1. Dynamic Congestion-Adaptive Time Quanta (TSAS):
+       Adapts time slices tau_q dynamically based on instantaneous queue backlog pressure:
+       tau_q^{adapt} = tau_q^{base} * (1.0 + alpha_q * tanh(backlog / reference_backlog))
+       Prevents queue thrashing under heavy loads while maintaining low latency under light loads.
+    2. Near-Completion Quantum Slack (Self-Adaptive Horizon):
+       If a task's remaining compute demand exceeds the time quantum by less than slack_ratio
+       (e.g., 15%), the quantum is dynamically stretched by up to slack_ratio * tau_q to complete
+       the task immediately in the current queue level. This eliminates unnecessary demotion to
+       lower levels and avoids major queue re-waiting penalties.
+    3. Anti-Starvation Aging & Priority Boosting:
+       Monitors accumulated waiting time. If a demoted task waits longer than aging_threshold (e.g., 1.0s)
+       in Q2 or Q3, an adaptive priority boost doubles its available slice or expedites its service.
+    4. Heterogeneous Co-Processing Bottleneck Balancing:
+       Heterogeneous co-processing bottleneck max(D_c, D_g) is evaluated dynamically to balance
+       heterogeneous GPU and CPU resource consumption.
+    """
+    def __init__(self, mes_idx, gpu_type, time_slices=EnvConfig.TAU_VES,
+                 slack_ratio=EnvConfig.ADAPTIVE_MHFQ_SLACK_RATIO,
+                 aging_threshold=EnvConfig.ADAPTIVE_MHFQ_AGING_THRESHOLD,
+                 ref_backlog=EnvConfig.ADAPTIVE_MHFQ_REF_BACKLOG):
+        self.mes_idx = mes_idx
+        self.gpu_type = gpu_type  # r \in {0, 1, 2, 3}
+        self.base_time_slices = list(time_slices)
+        self.slack_ratio = float(slack_ratio)
+        self.aging_threshold = float(aging_threshold)
+        self.ref_backlog = float(ref_backlog)
+
+        # Explicit task container queues for Q1, Q2, Q3 (FIFO)
+        self.q1 = deque()
+        self.q2 = deque()
+        self.q3 = deque()
+
+        # Auxiliary availability timelines for queue servers (Absolute simulation timestamps)
+        self.avail_q1 = 0.0
+        self.avail_q2 = 0.0
+        self.avail_q3 = 0.0
+
+        # Adaptation telemetry
+        self.tasks_processed = 0
+        self.slack_completions = 0
+        self.priority_boosts = 0
+        self.q1_completions = 0
+        self.q2_completions = 0
+        self.q3_completions = 0
+
+    def get_total_backlog(self):
+        """Returns total queued workload in bits across Q1, Q2, and Q3."""
+        b1 = sum(item.task.size for item in self.q1)
+        b2 = sum(item.task.size for item in self.q2)
+        b3 = sum(item.task.size for item in self.q3)
+        return b1 + b2 + b3
+
+    def get_adaptive_time_slices(self):
+        """
+        Dynamically computes congestion-adapted time slices based on instantaneous backlog.
+        Scales base slices using smooth hyperbolic tangent response to avoid discontinuity.
+        """
+        backlog = self.get_total_backlog()
+        load_ratio = float(np.tanh(backlog / max(1.0, self.ref_backlog)))
+
+        tau1 = self.base_time_slices[0] * (1.0 + 0.20 * load_ratio)
+        tau2 = self.base_time_slices[1] * (1.0 + 0.40 * load_ratio)
+        tau3 = self.base_time_slices[2] * (1.0 + 0.60 * load_ratio)
+        return [tau1, tau2, tau3]
+
+    def process_task(self, task, entry_time, f_c, f_g):
+        r"""
+        Simulates task execution and adaptive migration through Q1 -> Q2 -> Q3.
+        """
+        self.tasks_processed += 1
+        task_state = QueuedTaskState(task, entry_time)
+        self.q1.append(task_state)
+
+        fc_rate = max(1e6, float(f_c))
+        fg_rate = max(1e6, float(f_g)) if task.R > 0 else 1.0
+
+        time_slices = self.get_adaptive_time_slices()
+
+        # -------------------------------------------------------------
+        # Level 1 Queue Q1 (Adaptive Time slice with near-completion slack)
+        # -------------------------------------------------------------
+        head_q1 = self.q1.popleft()
+        service_start_q1 = max(head_q1.queue_entry_time, self.avail_q1)
+        w1 = service_start_q1 - head_q1.queue_entry_time
+        head_q1.accumulated_waiting_time += w1
+
+        d_c1 = head_q1.remaining_cpu_cycles / fc_rate
+        d_g1 = (head_q1.remaining_gpu_cycles / fg_rate) if task.R > 0 else 0.0
+        d1 = max(d_c1, d_g1)
+
+        slice_q1 = time_slices[0]
+        # Near-completion slack: if task finishes within (1 + slack_ratio) * slice_q1, stretch quantum
+        if d1 <= slice_q1 * (1.0 + self.slack_ratio):
+            exec1 = d1
+            if d1 > slice_q1:
+                self.slack_completions += 1
+        else:
+            exec1 = slice_q1
+
+        head_q1.service_time += exec1
+        cpu_consumed1 = min(head_q1.remaining_cpu_cycles, fc_rate * exec1)
+        gpu_consumed1 = min(head_q1.remaining_gpu_cycles, fg_rate * exec1) if task.R > 0 else 0.0
+        head_q1.remaining_cpu_cycles = max(0.0, head_q1.remaining_cpu_cycles - cpu_consumed1)
+        head_q1.remaining_gpu_cycles = max(0.0, head_q1.remaining_gpu_cycles - gpu_consumed1)
+
+        self.avail_q1 = service_start_q1 + exec1
+
+        if head_q1.remaining_cpu_cycles <= 1e-5 and head_q1.remaining_gpu_cycles <= 1e-5:
+            # Completed in Q1
+            self.q1_completions += 1
+            head_q1.completion_time = service_start_q1 + exec1
+            head_q1.completion_delay = head_q1.completion_time - head_q1.arrival_slot
+            return head_q1.service_time, head_q1.accumulated_waiting_time, head_q1.completion_time, head_q1.completion_delay
+
+        # -------------------------------------------------------------
+        # Migrate Q1 -> Q2 (Adaptive Time slice + Aging / Anti-Starvation Boost)
+        # -------------------------------------------------------------
+        head_q1.queue_level = 2
+        head_q1.queue_entry_time = service_start_q1 + exec1
+        self.q2.append(head_q1)
+
+        head_q2 = self.q2.popleft()
+        service_start_q2 = max(head_q2.queue_entry_time, self.avail_q2)
+        w2 = service_start_q2 - head_q2.queue_entry_time
+        head_q2.accumulated_waiting_time += w2
+
+        d_c2 = head_q2.remaining_cpu_cycles / fc_rate
+        d_g2 = (head_q2.remaining_gpu_cycles / fg_rate) if task.R > 0 else 0.0
+        d2 = max(d_c2, d_g2)
+
+        slice_q2 = time_slices[1]
+        # Anti-starvation check: if accumulated wait exceeds aging threshold, double slice
+        if head_q2.accumulated_waiting_time >= self.aging_threshold:
+            self.priority_boosts += 1
+            slice_q2 = slice_q2 * 2.0
+
+        if d2 <= slice_q2 * (1.0 + self.slack_ratio):
+            exec2 = d2
+            if d2 > slice_q2:
+                self.slack_completions += 1
+        else:
+            exec2 = slice_q2
+
+        head_q2.service_time += exec2
+        cpu_consumed2 = min(head_q2.remaining_cpu_cycles, fc_rate * exec2)
+        gpu_consumed2 = min(head_q2.remaining_gpu_cycles, fg_rate * exec2) if task.R > 0 else 0.0
+        head_q2.remaining_cpu_cycles = max(0.0, head_q2.remaining_cpu_cycles - cpu_consumed2)
+        head_q2.remaining_gpu_cycles = max(0.0, head_q2.remaining_gpu_cycles - gpu_consumed2)
+
+        self.avail_q2 = service_start_q2 + exec2
+
+        if head_q2.remaining_cpu_cycles <= 1e-5 and head_q2.remaining_gpu_cycles <= 1e-5:
+            # Completed in Q2
+            self.q2_completions += 1
+            head_q2.completion_time = service_start_q2 + exec2
+            head_q2.completion_delay = head_q2.completion_time - head_q2.arrival_slot
+            return head_q2.service_time, head_q2.accumulated_waiting_time, head_q2.completion_time, head_q2.completion_delay
+
+        # -------------------------------------------------------------
+        # Migrate Q2 -> Q3 (Complex queue - process remaining work to completion)
+        # -------------------------------------------------------------
+        head_q2.queue_level = 3
+        head_q2.queue_entry_time = service_start_q2 + exec2
+        self.q3.append(head_q2)
+
+        head_q3 = self.q3.popleft()
+        service_start_q3 = max(head_q3.queue_entry_time, self.avail_q3)
+        w3 = service_start_q3 - head_q3.queue_entry_time
+        head_q3.accumulated_waiting_time += w3
+
+        if head_q3.accumulated_waiting_time >= self.aging_threshold:
+            self.priority_boosts += 1
+
+        d_c3 = head_q3.remaining_cpu_cycles / fc_rate
+        d_g3 = (head_q3.remaining_gpu_cycles / fg_rate) if task.R > 0 else 0.0
+        exec3 = max(d_c3, d_g3)
+        head_q3.service_time += exec3
+
+        head_q3.remaining_cpu_cycles = 0.0
+        head_q3.remaining_gpu_cycles = 0.0
+
+        self.avail_q3 = service_start_q3 + exec3
+        self.q3_completions += 1
+        head_q3.completion_time = service_start_q3 + exec3
+        head_q3.completion_delay = head_q3.completion_time - head_q3.arrival_slot
+
+        return head_q3.service_time, head_q3.accumulated_waiting_time, head_q3.completion_time, head_q3.completion_delay
+
+
 class MHFQ:
     """
     Multi-Level Heterogeneous Feedback Queue Framework (Paper Section III-A.2, Eq 5).
     Maintains MHFQ processors across M MES nodes and |R| GPU resource types.
+    Supports optional self-adaptive scheduling mode.
     """
-    def __init__(self, num_mes=EnvConfig.NUM_MES, num_gpu_types=EnvConfig.NUM_GPU_TYPES):
+    def __init__(self, num_mes=EnvConfig.NUM_MES, num_gpu_types=EnvConfig.NUM_GPU_TYPES,
+                 adaptive=False, **adaptive_kwargs):
         self.num_mes = num_mes
         self.num_gpu_types = num_gpu_types
-        # Processors for each MES j and GPU type r \in {0, 1, 2, 3}
-        self.processors = {
-            j: {r: MHFQProcessor(j, r) for r in range(num_gpu_types + 1)}
-            for j in range(num_mes)
-        }
+        self.adaptive = adaptive
+        if adaptive:
+            self.processors = {
+                j: {r: AdaptiveMHFQProcessor(j, r, **adaptive_kwargs) for r in range(num_gpu_types + 1)}
+                for j in range(num_mes)
+            }
+        else:
+            self.processors = {
+                j: {r: MHFQProcessor(j, r) for r in range(num_gpu_types + 1)}
+                for j in range(num_mes)
+            }
 
     def get_queue_length(self, mes_idx, gpu_type=0):
         r = int(gpu_type) if isinstance(gpu_type, (int, float, np.integer)) else 0
@@ -198,6 +399,46 @@ class MHFQ:
         r = min(max(0, int(task.R)), self.num_gpu_types)
         proc = self.processors[mes_idx][r]
         return proc.process_task(task, entry_time, f_c, f_g)
+
+
+class AdaptiveMHFQ(MHFQ):
+    """
+    Multi-Level Heterogeneous Feedback Queue with Self-Adaptive Scheduling (Adaptive MHFQ).
+    First-class drop-in queue framework featuring:
+    - Congestion-aware time quantum scaling
+    - Near-completion quantum slack tolerance
+    - Anti-starvation aging and priority boosting
+    - Heterogeneous CPU/GPU bottleneck balancing
+    """
+    def __init__(self, num_mes=EnvConfig.NUM_MES, num_gpu_types=EnvConfig.NUM_GPU_TYPES,
+                 time_slices=EnvConfig.TAU_VES,
+                 slack_ratio=EnvConfig.ADAPTIVE_MHFQ_SLACK_RATIO,
+                 aging_threshold=EnvConfig.ADAPTIVE_MHFQ_AGING_THRESHOLD,
+                 ref_backlog=EnvConfig.ADAPTIVE_MHFQ_REF_BACKLOG):
+        super().__init__(
+            num_mes=num_mes, num_gpu_types=num_gpu_types, adaptive=True,
+            time_slices=time_slices, slack_ratio=slack_ratio,
+            aging_threshold=aging_threshold, ref_backlog=ref_backlog
+        )
+
+    def get_adaptive_stats(self):
+        """Aggregates telemetry across all MES processors."""
+        total_tasks = sum(self.processors[j][r].tasks_processed for j in range(self.num_mes) for r in range(self.num_gpu_types + 1))
+        total_slack = sum(self.processors[j][r].slack_completions for j in range(self.num_mes) for r in range(self.num_gpu_types + 1))
+        total_boosts = sum(self.processors[j][r].priority_boosts for j in range(self.num_mes) for r in range(self.num_gpu_types + 1))
+        q1_comp = sum(self.processors[j][r].q1_completions for j in range(self.num_mes) for r in range(self.num_gpu_types + 1))
+        q2_comp = sum(self.processors[j][r].q2_completions for j in range(self.num_mes) for r in range(self.num_gpu_types + 1))
+        q3_comp = sum(self.processors[j][r].q3_completions for j in range(self.num_mes) for r in range(self.num_gpu_types + 1))
+        return {
+            'total_tasks': total_tasks,
+            'slack_completions': total_slack,
+            'priority_boosts': total_boosts,
+            'q1_completions': q1_comp,
+            'q2_completions': q2_comp,
+            'q3_completions': q3_comp,
+            'slack_completion_rate': float(total_slack / max(1, total_tasks)),
+            'priority_boost_rate': float(total_boosts / max(1, total_tasks))
+        }
 
 
 class FCFSQueue:
