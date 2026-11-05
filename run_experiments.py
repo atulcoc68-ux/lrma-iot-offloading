@@ -127,6 +127,26 @@ def run_fig9_fig10_experiments(seeds=[42, 43, 44, 45, 46], slots=EnvConfig.TOTAL
     print(f"Saved Fig 9 & 10 summary to {summary_path}")
     return df_summary
 
+def run_adaptive_mhfq_comparison(seeds=[42, 43, 44, 45, 46], slots=EnvConfig.TOTAL_SLOTS):
+    print("\n" + "=" * 70)
+    print("RUNNING SIMULATION SWEEP FOR ADAPTIVE MHFQ VS STATIC MHFQ")
+    print("=" * 70)
+
+    queues = ['MHFQ', 'AdaptiveMHFQ']
+    user_scales = [20, 25, 30]
+    tasks = [(q, n, seed, slots) for n in user_scales for q in queues for seed in seeds]
+
+    max_workers = min(8, multiprocessing.cpu_count())
+    with ProcessPoolExecutor(max_workers=max_workers) as executor:
+        records = list(executor.map(_eval_fig8_task, tasks))
+
+    df_summary = pd.DataFrame(records)
+    summary_path = os.path.join(EnvConfig.PROCESSED_RESULTS_DIR, "adaptive_mhfq_summary.csv")
+    df_summary.to_csv(summary_path, index=False)
+    print(f"Saved Adaptive MHFQ summary to {summary_path}")
+    return df_summary
+
+
 def run_all_experiments(seeds=[42, 43, 44, 45, 46], slots=EnvConfig.TOTAL_SLOTS):
     start_t = time.time()
     print("=" * 70)
@@ -139,6 +159,7 @@ def run_all_experiments(seeds=[42, 43, 44, 45, 46], slots=EnvConfig.TOTAL_SLOTS)
     run_fig4_fig5_experiments(seeds, slots)
     run_fig6_fig7_experiments(seeds, slots)
     run_fig8_experiments(seeds, slots)
+    run_adaptive_mhfq_comparison(seeds, slots)
     run_fig9_fig10_experiments(seeds, slots)
 
     elapsed = time.time() - start_t

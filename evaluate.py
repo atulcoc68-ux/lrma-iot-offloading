@@ -9,14 +9,14 @@ import pandas as pd
 try:
     from src.config import EnvConfig
     from src.data_loader import AlibabaWorkloadLoader, LRMATask
-    from src.lstm_model import WorkloadPredictor, quantize_predictor
+    from src.lstm_model import WorkloadPredictor
     from src.agents import DRLActor, MA3MCOActor, LMADDPGActor, DVCCOAgent
     from src.environment import LRMA_Environment
     from src.lyapunov import LRMARewardCalculator
 except ModuleNotFoundError:
     from config import EnvConfig
     from data_loader import AlibabaWorkloadLoader, LRMATask
-    from lstm_model import WorkloadPredictor, quantize_predictor
+    from lstm_model import WorkloadPredictor
     from agents import DRLActor, MA3MCOActor, LMADDPGActor, DVCCOAgent
     from environment import LRMA_Environment
     from lyapunov import LRMARewardCalculator
@@ -29,7 +29,8 @@ def evaluate_policy(algorithm='LRMA', num_ed=EnvConfig.NUM_ED, V_val=EnvConfig.V
     """
     Evaluates an offloading algorithm on real Alibaba workload trace (30% Evaluation Split).
     Guarantees all comparative algorithms receive the IDENTICAL slot workload sequence per seed.
-    Supports optional INT8 Quantized LSTM for ultra-low latency prediction.
+    Uses original full-precision LSTM Workload Predictor (IEEE TNSE 2025 Eq. 41-42).
+    Supports baseline queuing frameworks ('FCFS', 'MMC', 'MHFQ') and 'AdaptiveMHFQ'.
     """
     np.random.seed(seed)
     torch.manual_seed(seed)
@@ -42,9 +43,8 @@ def evaluate_policy(algorithm='LRMA', num_ed=EnvConfig.NUM_ED, V_val=EnvConfig.V
         arrival_rate=task_arrival_rate, calibrated=calibrated
     )
 
+    # Use original full-precision LSTM model (IEEE TNSE 2025 Eq. 41-42)
     predictor = WorkloadPredictor(input_dim=4, hidden_dim=64, output_dim=4, num_layers=2)
-    if use_quantized_lstm:
-        predictor = quantize_predictor(predictor)
     predictor.eval()
 
     env = LRMA_Environment(loader, predictor, EnvConfig, queue_type=queue_type, num_ed=num_ed, V_val=V_val)
@@ -177,19 +177,18 @@ def evaluate_policy(algorithm='LRMA', num_ed=EnvConfig.NUM_ED, V_val=EnvConfig.V
 
 if __name__ == "__main__":
     import argparse
-    parser = argparse.ArgumentParser(description="LRMA Policy Evaluation")
+    parser = argparse.ArgumentParser(description="LRMA Policy Evaluation (Original LSTM Predictor)")
     parser.add_argument("--algorithm", type=str, default="LRMA", choices=["LRMA", "MA3MCO", "L-MADDPG", "DVCCO"])
+    parser.add_argument("--queue-type", type=str, default="MHFQ", choices=["MHFQ", "AdaptiveMHFQ", "FCFS", "MMC"])
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--slots", type=int, default=EnvConfig.TOTAL_SLOTS)
-    parser.add_argument("--quantized", action="store_true", help="Use dynamic INT8 quantized LSTM")
     args = parser.parse_args()
 
     summary, _, _ = evaluate_policy(
-        algorithm=args.algorithm, seed=args.seed, total_slots=args.slots,
-        use_quantized_lstm=args.quantized
+        algorithm=args.algorithm, queue_type=args.queue_type, seed=args.seed, total_slots=args.slots
     )
     print("\n" + "=" * 60)
-    print(f"{args.algorithm} POLICY EVALUATION SUMMARY (DYNAMIC RUN | Quantized={args.quantized})")
+    print(f"{args.algorithm} POLICY EVALUATION SUMMARY (Queue: {args.queue_type} | Original LSTM)")
     print("=" * 60)
     for k, v in summary.items():
         print(f"{k:30s}: {v}")

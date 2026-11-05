@@ -2,12 +2,12 @@ import numpy as np
 
 try:
     from src.config import EnvConfig
-    from src.lyapunov import MHFQ, FCFSQueue, MMCQueue, LRMARewardCalculator
+    from src.lyapunov import MHFQ, AdaptiveMHFQ, FCFSQueue, MMCQueue, LRMARewardCalculator
     from src.wireless import WirelessModel
     from src.lstm_model import get_future_workload_estimate
 except ModuleNotFoundError:
     from config import EnvConfig
-    from lyapunov import MHFQ, FCFSQueue, MMCQueue, LRMARewardCalculator
+    from lyapunov import MHFQ, AdaptiveMHFQ, FCFSQueue, MMCQueue, LRMARewardCalculator
     from wireless import WirelessModel
     from lstm_model import get_future_workload_estimate
 
@@ -30,6 +30,8 @@ class LRMA_Environment:
             self.mhfq = FCFSQueue(self.num_mes)
         elif queue_type == 'MMC':
             self.mhfq = MMCQueue(self.num_mes)
+        elif queue_type in ('AdaptiveMHFQ', 'ADAPTIVE_MHFQ', 'adaptive_mhfq', 'AMHFQ'):
+            self.mhfq = AdaptiveMHFQ(self.num_mes, config.NUM_GPU_TYPES)
         else:
             self.mhfq = MHFQ(self.num_mes, config.NUM_GPU_TYPES)
 
